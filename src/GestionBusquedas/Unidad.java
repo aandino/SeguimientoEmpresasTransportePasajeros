@@ -1,4 +1,6 @@
 package GestionBusquedas;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Unidad {
     private String dominio;
@@ -97,5 +99,32 @@ public class Unidad {
         }
         else
             return false;
+    }
+
+    public void altaNuevaUnidad(){
+        LocalDate fechaActual = LocalDate.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String fechaFormateada = fechaActual.format(formato);
+
+        String queryEmpresaActiva =
+                "select count(*) from Empresa where cuit='"+this.cuitEmpresa+"' and activa ='1';";
+
+        String cargarFlotaUnidad =
+                "insert into Flota (Empresa_cuil,Unidad_dominio,fechaAlta,nroExpediente,nroResolicionAlta)" +
+                "values('"+this.cuitEmpresa+","+this.dominio+","+fechaFormateada+","+this.nroExpediente+","+
+                this.nroResolucion+");";
+
+        String isEmpresaActiva = runQuery(queryEmpresaActiva);
+
+        if(isEmpresaActiva == '1'){
+            runQuery(cargarFlotaUnidad);
+
+        }
+        else
+            System.out.print("Se esta cargando una undiada en una empresa que no tiene un contrato acitvo !!!");
+
+        String insertUnidad ="";
+        String insertFlotaUnidad = "";
+
     }
 }

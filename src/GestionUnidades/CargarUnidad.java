@@ -15,16 +15,7 @@ public class CargarUnidad {
     /**
      * Constructor para dar el alta a una unidad inexistente.
      * @param dominio
-     * @param modelo
-     * @param nroInterno
-     * @param nroRTO
-     * @param corredor
-     * @param cuitEmpresa
-     * @param nroExpediente
-     * @param nroResolucion
-     * @param nroChasis
-     * @param nroMotor
-     * @param nroCarroceria
+     *
      */
     public CargarUnidad(String dominio,int modelo,int nroInterno,
                         int nroRTO,String corredor,String cuitEmpresa,
@@ -34,13 +25,13 @@ public class CargarUnidad {
         this.buscarUnidad = new BuscarUnidad(dominio);
         this.buscarRTO = new BuscarRTO(nroRTO);
         /**
-         * Si la unidad "no" existe, ni ha existido, alta completa.
+         * Si la unidad "no" ha existido nunca en el sistema.
          */
         if(! buscarUnidad.existeUnidad()){
             /**
-             * Veifico si la RTO existe y esta aprobada.
+             * Veifico si la RTO existe "y" esta aprobada.
              */
-            if(this.buscarRTO.queryRTO()) {
+            if(this.buscarRTO.verifyRTO()) {
                 this.dominio = dominio;
                 this.modelo = modelo;
                 this.nroInterno = nroInterno;
@@ -52,10 +43,16 @@ public class CargarUnidad {
                 this.nroChasis = nroChasis;
                 this.nroMotor = nroMotor;
                 this.nroCarroceria = nroCarroceria;
+                altaNuevaUnidad();
             }
             else{
                 // La RTO presentada no es valida -> rechazar carga !!!
             }
+            /**
+             * Ya sé que la unidad existe o ha existido en un momento
+             * en el tiempo. Tengo que averiguar si esta activa, es decir,
+             * si asociada a alguna empresa-
+             */
         } else if (! this.buscarUnidad.isActive()) { <<<<<<<<< ====================
             
         }
@@ -65,5 +62,12 @@ public class CargarUnidad {
     public CargarUnidad() {
     }
 
-
+    private void altaNuevaUnidad(){
+        Unidad nuevaUnidad = new Unidad( this.dominio,this.modelo,
+                                        this.nroInterno,this.nroRTO,
+                                        this.corredor,this.cuitEmpresa,
+                                        this.nroExpediente, this.nroResolucion,
+                                        this.nroChasis,this.nroMotor,this.nroCarroceria);
+        nuevaUnidad.altaNuevaUnidad();
+    }
 }
