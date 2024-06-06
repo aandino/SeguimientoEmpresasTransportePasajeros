@@ -26,8 +26,8 @@ public class RevisionTecnica {
     }
 
     public boolean isAprobe(){
-        String query = "select aprobado from RevisionTecnica where nroTecnica = '" +this.nroTecnica+"';";
-        if(query == "1")
+        String query = "select count(*) from RevisionTecnica where aprobado ='1' and nroTecnica = '" +this.nroTecnica+"';";
+        if(query != "0")
             return true;
         else
             return false;

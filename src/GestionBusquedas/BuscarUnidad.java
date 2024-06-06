@@ -23,7 +23,7 @@ public class BuscarUnidad extends Buscar {
     }
 
     /**
-     * Verifica si la unidad existe ó ha existido
+     * Verifica si la unidad existe ó ha existido en el sistema.
      * @return false: no existe o esta inactiva.
      */
     public boolean existeUnidad() {

@@ -23,10 +23,12 @@ public class BuscarRTO extends  Buscar{
      * @return true: en caso afirmativo.
      */
     public boolean verifyRTO(){
-        if (this.nroRto.existRTO() && this.nroRto.isAprobe())
+        if(this.nroRto.isAprobe()) {
             return true;
-        else
+        }
+        else {
             return false;
+        }
     }
 
 }

@@ -28,7 +28,6 @@ public class Unidad {
                   String nroMotor, String nroCarroceria) {
         this.dominio = dominio;
         this.modelo = modelo;
-        this.nroRTO = nroRTO; //polemico no deberia estar aca !!!
         this.nroInterno = nroInterno;
         this.corredor = corredor;
         this.cuitEmpresa = cuitEmpresa;
@@ -70,61 +69,51 @@ public class Unidad {
     }
 
     /**
-     * Determinar la existencia de una unidad
-     * @return true: el dominio ya existe, aunque sea un dato historico.
+     * Quiero saber si la unidad esta/estuvo registrada en el sistema.
+     * @return true: el dominio exist en el sistema.
      * false: el dominio nunca ha sido dado de alta.
      */
     public boolean exist(){
         String query = "select count(*) from Unidad where dominio = '" +this.dominio+"';";
-        String resuladoQuery = runQuery(query);
-        if(resuladoQuery != null)
+        String resultadoQuery = runQuery(query);
+        if(resultadoQuery != "0")
             return true;
         else
             return false;
     }
 
     /**
-     * Verifica si la unidad, ademas de tener datos historicos esta activa,
-     * es decir, pertenece a la flota de alguna empresa.
-     *
-     * @return true; la unidad pertenece a la flota de alguna empresa.
-     * @return false; la unidad no existe o no esta asociada a ninguna empresa.
+     * Quiero saber si la unidad existe en el sistema "y" además está activa.
+     * @return true: unidad activa, pertenece a la flota de alguna empresa.
+     * @return false: la unidad no existe o no esta asociada a ninguna empresa.
      */
     public boolean isActive(){
-        String query = "select activo from Unidad where dominio = '" +this.dominio+"';";
-        if(exist()) {
-            String resuladoQuery = runQuery(query);
-            if (resuladoQuery == "1")
-                return true;
+        String query = "select count(*) from Unidad where activo ='1' and dominio = '" +this.dominio+"';";
+        String resultadoQuery = runQuery(query);
+
+        if(resultadoQuery != "0") {
+            return true;
         }
-        else
+        else {
             return false;
+        }
+
     }
 
-    public void altaNuevaUnidad(){
+    public void altaNuevaUnidad(String idFlota){
         LocalDate fechaActual = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String fechaFormateada = fechaActual.format(formato);
 
-        String queryEmpresaActiva =
-                "select count(*) from Empresa where cuit='"+this.cuitEmpresa+"' and activa ='1';";
-
-        String cargarFlotaUnidad =
-                "insert into Flota (Empresa_cuil,Unidad_dominio,fechaAlta,nroExpediente,nroResolicionAlta)" +
-                "values('"+this.cuitEmpresa+","+this.dominio+","+fechaFormateada+","+this.nroExpediente+","+
+        String insertarFlotaUnidad =
+                "insert into Flota (IdFlota,Empresa_cuil,Unidad_dominio,fechaAlta,nroExpediente,nroResolicionAlta)" +
+                "values('"+idFlota+"','"+this.cuitEmpresa+"','"+this.dominio+"','"+fechaFormateada+"','"+this.nroExpediente+"','"+
                 this.nroResolucion+");";
 
-        String isEmpresaActiva = runQuery(queryEmpresaActiva);
-
-        if(isEmpresaActiva == '1'){
-            runQuery(cargarFlotaUnidad);
-
-        }
-        else
-            System.out.print("Se esta cargando una undiada en una empresa que no tiene un contrato acitvo !!!");
-
-        String insertUnidad ="";
-        String insertFlotaUnidad = "";
-
+        String insertarUnidad =
+                "INSERT INTO UNIDAD (dominio, modelo, nroChasis, nroMotor, nroCarroceria, activo) VALUES("+
+                        this.dominio+","+this.modelo+","+this.nroChasis+","+this.nroCarroceria+",1);";
+        runQuery(insertarFlotaUnidad);
+        runQuery(insertarFlotaUnidad);
     }
 }
