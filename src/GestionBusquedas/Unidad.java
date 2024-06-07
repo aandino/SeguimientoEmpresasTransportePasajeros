@@ -90,7 +90,6 @@ public class Unidad {
     public boolean isActive(){
         String query = "select count(*) from Unidad where activo ='1' and dominio = '" +this.dominio+"';";
         String resultadoQuery = runQuery(query);
-
         if(resultadoQuery != "0") {
             return true;
         }
@@ -100,20 +99,24 @@ public class Unidad {
 
     }
 
-    public void altaNuevaUnidad(String idFlota){
-        LocalDate fechaActual = LocalDate.now();
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String fechaFormateada = fechaActual.format(formato);
+    public void setUnidadActiva(){
+        String queryUpdate ="update unidad set activo ='1' where dominio ='" +this.dominio+"';";
+        String resultadoUpdate = runQuery(queryUpdate);
+    }
 
+    public void asociarUnidadFlota(String inIdFlota){
+        LocalDate fechaActual = LocalDate.now();
         String insertarFlotaUnidad =
                 "insert into Flota (IdFlota,Empresa_cuil,Unidad_dominio,fechaAlta,nroExpediente,nroResolicionAlta)" +
-                "values('"+idFlota+"','"+this.cuitEmpresa+"','"+this.dominio+"','"+fechaFormateada+"','"+this.nroExpediente+"','"+
-                this.nroResolucion+");";
+                        "values('"+inIdFlota+"','"+this.cuitEmpresa+"','"+this.dominio+"','"+fechaActual+"','"+this.nroExpediente+"','"+
+                        this.nroResolucion+");";
+
+    }
+
+    public void crearNuevaUnidad(){
 
         String insertarUnidad =
                 "INSERT INTO UNIDAD (dominio, modelo, nroChasis, nroMotor, nroCarroceria, activo) VALUES("+
                         this.dominio+","+this.modelo+","+this.nroChasis+","+this.nroCarroceria+",1);";
-        runQuery(insertarFlotaUnidad);
-        runQuery(insertarFlotaUnidad);
     }
 }

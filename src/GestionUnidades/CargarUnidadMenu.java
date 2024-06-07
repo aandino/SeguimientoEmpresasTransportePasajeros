@@ -6,7 +6,8 @@ public class CargarUnidadMenu {
     private String itemDominio,itemModelo;
     private int itemNroInterno,itemNroRTO;
     private String itemCorredor,itemCuitEmpresa;
-    private String itemNroExpediente,itemNroResolucion,nroChasis,nroMotor,nroCarroceria;
+    private String itemNroExpediente,itemNroResolucion;
+    private String nroChasis,nroMotor,nroCarroceria;
 
     private CargarUnidad nuevaUndiad;
 
