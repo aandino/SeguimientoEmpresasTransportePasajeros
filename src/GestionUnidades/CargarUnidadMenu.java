@@ -3,13 +3,13 @@ import java.util.Scanner;
 public class CargarUnidadMenu {
 
     private Scanner scanner = new Scanner(System.in);
-    private String itemDominio,itemModelo;
-    private int itemNroInterno,itemNroRTO;
+    private String itemDominio;
+    private int itemNroInterno,itemNroRTO,itemModelo;
     private String itemCorredor,itemCuitEmpresa;
     private String itemNroExpediente,itemNroResolucion;
     private String nroChasis,nroMotor,nroCarroceria;
 
-    private CargarUnidad nuevaUndiad;
+    private CargarUnidad cargarUnidad;
 
     public CargarUnidadMenu() {
         System.out.print("--- MENUA CARGAR UNIDAD ---");
@@ -17,15 +17,13 @@ public class CargarUnidadMenu {
         System.out.print("Dominio: ");
         try {
             this.itemDominio = scanner.nextLine();
-            scanner.nextLine();  // Consumir nueva línea
-        }
+           }
         catch (Exception e) {
             System.out.println("ERROR: No se puede ingresar el dominio");
         }
         System.out.print("Modelo: ");
         try {
-            this.itemModelo = scanner.nextLine();
-            scanner.nextLine();  // Consumir nueva línea
+            this.itemModelo = scanner.nextInt();
         }
         catch (Exception e) {
             System.out.println("ERROR: No se puede ingresar el modelo");
@@ -33,7 +31,6 @@ public class CargarUnidadMenu {
         System.out.print("Nro Interno: ");
         try {
             this.itemNroInterno = scanner.nextInt();
-            scanner.nextLine();  // Consumir nueva línea
         }
         catch (Exception e) {
             System.out.println("ERROR: No se puede ingresar el nro de interno");
@@ -43,7 +40,6 @@ public class CargarUnidadMenu {
         System.out.print("Corredor: ");
         try {
             this.itemCorredor = scanner.nextLine();
-            scanner.nextLine();  // Consumir nueva línea
         }
         catch (Exception e) {
             System.out.println("ERROR: No se puede ingresar el corredor");
@@ -52,7 +48,6 @@ public class CargarUnidadMenu {
         System.out.print("Nro RTO: ");
         try{
             this.itemNroRTO = scanner.nextInt();
-            scanner.nextLine();  // Consumir nueva línea
         }
         catch (Exception e) {
             System.out.println("ERROR: No se puede ingresar el nro de rto");
@@ -61,7 +56,6 @@ public class CargarUnidadMenu {
         System.out.print("CUIT Empresa: ");
         try{
             this.itemCuitEmpresa = scanner.nextLine();
-            scanner.nextLine();  // Consumir nueva línea
         }
         catch (Exception e) {
             System.out.println("ERROR: No se puede ingresar el cuit empresa");
@@ -69,7 +63,6 @@ public class CargarUnidadMenu {
         System.out.print("Nro Expediente: ");
         try{
             this.itemNroExpediente = scanner.nextLine();
-            scanner.nextLine();  // Consumir nueva línea
         }
         catch (Exception e) {
             System.out.print("ERROR: el formato del expediente es incorrecto ");
@@ -78,7 +71,6 @@ public class CargarUnidadMenu {
         System.out.print("Nro Resolución: ");
         try{
             this.itemNroResolucion = scanner.nextLine();
-            scanner.nextLine();  // Consumir nueva línea
         }
         catch (Exception e) {
             System.out.print("ERROR: el formato del resolucion es incorrecto ");
@@ -86,7 +78,11 @@ public class CargarUnidadMenu {
         }
 // FALTA INICIALIZAR ,nroChasis,nroMotor,nroCarroceria ¡¡¡ OJO !!!!
         try {
-            nuevaUndiad = new CargarUnidad();
+            cargarUnidad = new CargarUnidad(this.itemDominio,this.itemModelo,
+                    this.itemNroInterno,this.itemNroRTO,this.itemCorredor,
+                    this.itemCuitEmpresa,this.itemNroExpediente,this.itemNroResolucion,
+                    this.nroChasis,this.nroMotor,this.nroCarroceria);
+            cargarUnidad.altaNuevaUnidad();
         }
         catch (Exception e) {
             System.out.println("ERROR: No se puede ingresar el nuevo unidad");
@@ -99,7 +95,7 @@ public class CargarUnidadMenu {
         System.out.print("Dominio: ");
         this.itemDominio = scanner.nextLine();
         System.out.print("Modelo: ");
-        this.itemModelo = scanner.nextLine();
+        this.itemModelo = scanner.nextInt();
         System.out.print("Nro Interno: ");
         this.itemNroInterno = scanner.nextInt();
         scanner.nextLine(); // Consumir nueva línea

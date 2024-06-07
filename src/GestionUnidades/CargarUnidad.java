@@ -29,9 +29,6 @@ public class CargarUnidad {
         this.nroCarroceria = nroCarroceria;
     }
 
-    public CargarUnidad() {
-    }
-
     public boolean isAntiguedadOK(){
         LocalDate currentDate = LocalDate.now();
         LocalDate modeloUnidad = LocalDate.of(this.modelo, 12, 31);
@@ -106,7 +103,7 @@ public class CargarUnidad {
      * crear una nueva unidad en la DB y asociar está a la flota
      * de la empresa.
      */
-    private void altaNuevaUnidad(){
+    public void altaNuevaUnidad(){
         Unidad nuevaUnidad = new Unidad( this.dominio,this.modelo,
                                         this.nroInterno,this.nroRTO,
                                         this.corredor,this.cuitEmpresa,
