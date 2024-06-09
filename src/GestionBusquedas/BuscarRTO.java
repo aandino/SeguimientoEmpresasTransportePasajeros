@@ -3,18 +3,21 @@ package GestionBusquedas;
 // Este es la clase controlador BuscarRTO
 
 public class BuscarRTO extends  Buscar{
-    private RevisionTecnica nroRto;
+    private int nroTecnica;
+    private RevisionTecnica Rto;
     private String dominio ="";
 
     public BuscarRTO(int nroTecnica) {
         super();
-        this.nroRto = new RevisionTecnica(nroTecnica);
+        this.nroTecnica = nroTecnica;
+        this.Rto = new RevisionTecnica(nroTecnica);
     }
 
     public BuscarRTO(int nroTecnica, String dominio) {
         super();
-        this.nroRto = nroRto;
+        this.nroTecnica = nroTecnica;
         this.dominio = dominio;
+        this.Rto = new RevisionTecnica(nroTecnica);
     }
 
     /**
@@ -23,7 +26,7 @@ public class BuscarRTO extends  Buscar{
      * @return true: en caso afirmativo.
      */
     public boolean verifyRTO(){
-        if(this.nroRto.isAprobe()) {
+        if(this.Rto.isAprobe(this.nroTecnica)) {
             return true;
         }
         else {

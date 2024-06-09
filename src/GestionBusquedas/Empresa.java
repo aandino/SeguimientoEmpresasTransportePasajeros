@@ -2,74 +2,76 @@ package GestionBusquedas;
 
 public class Empresa {
 
-    private String cuit, razonSocial, domicilioComercial, emailEmpresa ="";
-    private int activa =0;
+    private String cuit;
+    private String razonSocial;
+    private String domicilioComercial;
+    private String emailEmpresa;
+    private int activa;
+
+    public static Empresa[] listaEmpresas = new Empresa[2];
+
+    static{
+        listaEmpresas[0] = new Empresa("30700786206","Blanca Paloma srl","av. libertador general san martin 91",
+                "administracion@blancapaloma.com");
+        listaEmpresas[1] = new Empresa("30710760965","Grupo MR SRL","Benedicto Morales 265",
+                "administracion@mr.com.ar");
+    }
 
     /**
      * Constructor para cuando quiera dar de alta una nueva empresa.
      */
-    public Empresa(String cuit, String razonSocial, String domicilioComercial, String emailEmpresa, int activa) {
+    public Empresa(String cuit, String razonSocial, String domicilioComercial, String emailEmpresa) {
         this.cuit = cuit;
         this.razonSocial = razonSocial;
         this.domicilioComercial = domicilioComercial;
         this.emailEmpresa = emailEmpresa;
-        this.activa = activa;
+        this.activa = 1;
     }
 
     /**
-     * Constructor para cuando solo quiero saber informacion sobre una empresa
-     * teniendo como unico dato su "cuit"
+     * Solo para cuando quiero saber información sobre una empresa
+     * teniendo como único dato su "cuit"
      */
     public Empresa(String cuit) {
         this.cuit = cuit;
     }
 
-    /**
-     * Metodo responsable de la realizacion de las conexiones y/o
-     * consultas a la base de datos (capa de abstraccion)
-     */
-    private String runQuery(String query){
-        return("resulado del query on Mysql !!");
+    public String getCuit() {
+        return cuit;
+    }
+
+    public boolean getActiva() {
+        return activa == 1;
     }
 
     /**
      * Quiero saber si la empresa esta/estuvo registrada en el sistema.
      */
-    public boolean exist(){
-        String query = "select count(*) from Empresa where cuit = '" +this.cuit+"';";
-        String resuladoQuery = runQuery(query);
 
-        if(resuladoQuery != "0") {
-            return true;
+    public int exist(String ciut) {
+        for (int i = 0; i < listaEmpresas.length; i++) {
+            if (listaEmpresas[i].getCuit().equals(ciut)) {
+                return i;
+            }
         }
-        else {
-            return false;
-        }
+        return -1;
     }
 
     /**
      * Quiero saber si la empresa además de existir en el sistema está activa.
-     * Supongo previamente que existe/existió en el sistema.
      */
-    public boolean isActive(){
-        String query = "select count(*) from Empresa where activo = '1' and cuit = '" +this.cuit+"';";
-        String resuladoQuery = runQuery(query);
-        if(resuladoQuery != "0") {
-            return true;
-        }
-        else {
+    public boolean isActive(String ciut){
+        int indice = exist(ciut);
+        if(indice >= 0){
+            if (listaEmpresas[indice].getActiva())
+                return true;
+            else
+                return false;
+        } else
             return false;
-        }
+        // Deberia lanzar una excepción: la empresa no se encuentra en la lista !!!
     }
 
-    public String getIdFlota(){
-        /**
-         * Solo puede haber una flota activa para una empresa al mismo tiempo.
-         */
-        String query =
-                "SELECT IdFlota from flota where activa = '1' and Empresa_cuit ='"+this.cuit+"' group by idFlota;";
-        return(runQuery(query));
-    }
 }
 
 

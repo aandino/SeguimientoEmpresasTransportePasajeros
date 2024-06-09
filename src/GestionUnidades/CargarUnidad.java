@@ -4,10 +4,17 @@ import java.time.Period;
 import GestionBusquedas.*;
 
 public class CargarUnidad {
-    private String dominio = "";
-    private int nroInterno,nroRTO,modelo = 0;
-    private String corredor,cuitEmpresa ="";
-    private String nroExpediente,nroResolucion,nroChasis,nroMotor,nroCarroceria = "";
+    private String dominio;
+    private int nroInterno;
+    private int nroRTO;
+    private int modelo;
+    private String corredor;
+    private String cuitEmpresa;
+    private String nroExpediente;
+    private String nroResolucion;
+    private String nroChasis;
+    private String nroMotor;
+    private String nroCarroceria;
 
     /**
      * Constructor para dar el alta a una unidad.
@@ -41,34 +48,23 @@ public class CargarUnidad {
      * @return true: la empresa esta activa (empresa.activa = 1 && existe)
      */
     public boolean validarEmpresaActiva(String inCuitEmpresa){
-        Empresa empresa = new Empresa(inCuitEmpresa);
-        return empresa.isActive();
+        return new Empresa(inCuitEmpresa).isActive(inCuitEmpresa);
     }
 
     /**
      * @return true: el nro RTO existe y esta aprobada (RevisionTecnica.aprobado = 1 && existe)
      */
-    public boolean validarRTO(int inRto){
-        RevisionTecnica rto = new RevisionTecnica(inRto);
-        if(rto.isAprobe()){
-            return true;
-        }
-        else{
-            return false;
-        }
+    public boolean validarRTO(int inNroTecnica){
+        return new RevisionTecnica(inNroTecnica).isAprobe(inNroTecnica);
     }
 
     /**
      * @return true: la unidad no existe en el sistema (unidad.dominio && Unidad.activo+Unidad.dominio not found)
      */
     public boolean isUnidadInexistente(String inDominio){
-        Unidad unidad = new Unidad(inDominio);
-        if(!unidad.isActive() && !unidad.exist()){
-            return true;
-        }
-        else{
-            return false;
-        }
+        //  Unidad unidad = new Unidad(inDominio);
+        return(new Unidad(inDominio).exist(inDominio) < 0);
+        //        return(unidad.exist(inDominio) < 0);
     }
 
     /**
@@ -76,13 +72,10 @@ public class CargarUnidad {
      * pero actualmente su estado es inactivo (unidad.activo=0).
      */
     public boolean isUnidadInactiva(String inDomino){
-        Unidad unidad = new Unidad(inDomino);
-        if(unidad.exist() && !unidad.isActive()){
+        if(! isUnidadInexistente(inDomino) && !(new Unidad(inDomino).isActive(inDomino)))
             return true;
-        }
-        else{
+        else
             return false;
-        }
     }
 
     /**
@@ -104,11 +97,8 @@ public class CargarUnidad {
      * de la empresa.
      */
     public void altaNuevaUnidad(){
-        Unidad nuevaUnidad = new Unidad( this.dominio,this.modelo,
-                                        this.nroInterno,this.nroRTO,
-                                        this.corredor,this.cuitEmpresa,
-                                        this.nroExpediente, this.nroResolucion,
-                                        this.nroChasis,this.nroMotor,this.nroCarroceria);
+        Unidad nuevaUnidad = new Unidad( this.dominio,this.modelo,this.nroInterno,this.nroRTO,
+                                        this.cuitEmpresa,this.nroChasis,this.nroMotor,this.nroCarroceria);
         if(isAntiguedadOK()) {
             if (validarRTO(this.nroRTO)) {
                 if (validarEmpresaActiva(this.cuitEmpresa)) {

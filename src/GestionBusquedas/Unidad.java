@@ -4,38 +4,44 @@ import java.time.format.DateTimeFormatter;
 
 public class Unidad {
     private String dominio;
-    private int nroInterno,nroRTO,modelo;
-    private String corredor,cuitEmpresa;
-    private String nroExpediente,nroResolucion,nroChasis,nroMotor,nroCarroceria;
+    private  int modelo;
+    private String nroChasis;
+    private String nroMotor;
+    private String carroceria;
+    private int activo;
+
+    public static Unidad[] listaUnidades = new Unidad[6];
+
+    static {
+        listaUnidades[0] = new Unidad("AC443NB", 2018,
+               "9BM384067HB000047", "924997U1170000", "ITALBUS");
+
+        listaUnidades[1] = new Unidad("AA381BF",2016,
+                "9BM384067HB035047","924997U1175569","ITALBUS");
+
+        listaUnidades[2] = new Unidad("JQJ193",2011,
+                "9BM384067BF136894","904968U0896049","METALPAR");
+
+        listaUnidades[3] = new Unidad("KIA817",2011,
+                "8BBC51A1ABM000335","D1A055820","METALPAR");
+/**
+ * Datos de prueba - esta mal hay que sacar nroInterno, corredor, nroExp,nroResolucion
+ *       listaUnidades[4] = new Unidad("AA381BB",2016,2606,120,"San Luis - La Carolina","30710760965",
+ *               "EXP-1290150/22","44/11","8BBC51A1AGM001214","DCA000280","TODO BUS");
+ */
+    }
 
     /**
      * Constructor para crear una nueva unidad no existente.
-     * @param dominio patente de la undiad
-     * @param modelo año de fabricacion de la unidad.
-     * @param nroRTO revision tecnica obligatoria, se realiza previo a la carga.
-     * @param nroInterno nro asignada en el corredor que le corresponde.
-     * @param corredor recorrido que realiza: CarlosPaz-Cordoba
-     * @param cuitEmpresa
-     * @param nroExpediente expediente asignada en el sistema general de gobierno.
-     * @param nroResolucion nro de la resolucion de alta dentro de ese expediente.
-     * @param nroChasis
-     * @param nroMotor
-     * @param nroCarroceria
      */
-    public Unidad(String dominio,int modelo,int nroRTO,int nroInterno,
-                  String corredor,String cuitEmpresa,
-                  String nroExpediente,String nroResolucion, String nroChasis,
-                  String nroMotor, String nroCarroceria) {
+    public Unidad(String dominio,int modelo,
+                  String nroChasis,String nroMotor, String carroceria) {
         this.dominio = dominio;
         this.modelo = modelo;
-        this.nroInterno = nroInterno;
-        this.corredor = corredor;
-        this.cuitEmpresa = cuitEmpresa;
-        this.nroExpediente = nroExpediente;
-        this.nroResolucion = nroResolucion;
         this.nroChasis = nroChasis;
         this.nroMotor = nroMotor;
-        this.nroCarroceria = nroCarroceria;
+        this.carroceria = carroceria;
+        this.activo = 1;
     }
 
     /**
@@ -47,39 +53,34 @@ public class Unidad {
         this.dominio = dominio;
     }
 
-    /**
-     * Constructor para cuando se quiera hacer consultas sobre la tabla
-     * flota (unidades pertenecientes a una empresa)
-     * @param dominio
-     * @param cuitEmpresa
-     */
-    public Unidad(String dominio, String cuitEmpresa) {
-        this.dominio = dominio;
-        this.cuitEmpresa = cuitEmpresa;
+    public String getDominio() {
+        return dominio;
     }
 
-    /**
-     * Metodo responsable de la realizacion de las conexiones y/o
-     * consultas a la base de datos (capa de abstraccion)
-     * @param query
-     * @return
-     */
-    private String runQuery(String query){
-        return("resulado del query on Mysql !!");
+    public boolean getActivo() {
+        return activo == 1;
+    }
+
+    public int getModelo() {
+        return modelo;
+    }
+
+    public void setActivo() {
+        this.activo = 1;
     }
 
     /**
      * Quiero saber si la unidad esta/estuvo registrada en el sistema.
-     * @return true: el dominio exist en el sistema.
-     * false: el dominio nunca ha sido dado de alta.
+     * @return indice: si el dominio exist en el sistema.
+     * -1 : si el dominio nunca ha sido dado de alta.
      */
-    public boolean exist(){
-        String query = "select count(*) from Unidad where dominio = '" +this.dominio+"';";
-        String resultadoQuery = runQuery(query);
-        if(resultadoQuery != "0")
-            return true;
-        else
-            return false;
+    public int exist(String dominio){
+        for (int i = 0; i < listaUnidades.length; i++) {
+            if (listaUnidades[i].getDominio().contentEquals(dominio)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -87,36 +88,40 @@ public class Unidad {
      * @return true: unidad activa, pertenece a la flota de alguna empresa.
      * @return false: la unidad no existe o no esta asociada a ninguna empresa.
      */
-    public boolean isActive(){
-        String query = "select count(*) from Unidad where activo ='1' and dominio = '" +this.dominio+"';";
-        String resultadoQuery = runQuery(query);
-        if(resultadoQuery != "0") {
-            return true;
-        }
-        else {
+    public boolean isActive(String dominio){
+        int indice = exist(dominio);
+        if(indice >= 0)
+            return listaUnidades[indice].getActivo();
+        else
             return false;
+        // Deberia lanzar una excepción la unidad no existe !!!
+        // Ojo !! puedo pensar que la unidad esta inactiva cuando en
+        // realidad no existe !!
+    }
+
+
+    public void setUnidadActiva(String dominio){
+        int indice = exist(dominio);
+        if(indice >= 0)
+            listaUnidades[indice].setActivo();
+        else
+            System.out.println("La unidad no existe disparar excepción !!");
+    }
+
+    public int nextDisponible(){
+        for (int i = 0; i < listaUnidades.length; i++) {
+            if(listaUnidades[i] == null)
+                return i;
         }
-
+        return -1;
     }
 
-    public void setUnidadActiva(){
-        String queryUpdate ="update unidad set activo ='1' where dominio ='" +this.dominio+"';";
-        String resultadoUpdate = runQuery(queryUpdate);
+    public void crearNuevaUnidad(Unidad nuevaUnidad){
+        int indice = nextDisponible();
+        if(indice >= 0 &&  indice < listaUnidades.length)
+            listaUnidades[indice] = nuevaUnidad;
+        else
+            System.out.println("No existe mas lugares donde insertar, disparar excepción !!");
     }
 
-    public void asociarUnidadFlota(String inIdFlota){
-        LocalDate fechaActual = LocalDate.now();
-        String insertarFlotaUnidad =
-                "insert into Flota (IdFlota,Empresa_cuil,Unidad_dominio,fechaAlta,nroExpediente,nroResolicionAlta)" +
-                        "values('"+inIdFlota+"','"+this.cuitEmpresa+"','"+this.dominio+"','"+fechaActual+"','"+this.nroExpediente+"','"+
-                        this.nroResolucion+");";
-
-    }
-
-    public void crearNuevaUnidad(){
-
-        String insertarUnidad =
-                "INSERT INTO UNIDAD (dominio, modelo, nroChasis, nroMotor, nroCarroceria, activo) VALUES("+
-                        this.dominio+","+this.modelo+","+this.nroChasis+","+this.nroCarroceria+",1);";
-    }
 }

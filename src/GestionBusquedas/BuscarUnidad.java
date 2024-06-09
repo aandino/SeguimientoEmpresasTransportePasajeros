@@ -22,15 +22,4 @@ public class BuscarUnidad extends Buscar {
         this.cuitEmpresa = "";
     }
 
-    /**
-     * Verifica si la unidad existe ó ha existido en el sistema.
-     * @return false: no existe o esta inactiva.
-     */
-    public boolean existeUnidad() {
-        return this.unidad.exist();
-    }
-
-    public boolean isActive(){
-        return unidad.isActive();
-    }
 }
