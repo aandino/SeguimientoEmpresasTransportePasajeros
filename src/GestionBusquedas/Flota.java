@@ -133,6 +133,9 @@ public class Flota {
         return -1;
     }
 
+    /**
+     * ESTA MAL SE DEBE EJECUTAR DESDE LA CLASE CONTROLADORA NO DESDE ACA !!!!
+     */
     public void addUnidadFlota(){
         int indice = nextDisponible();
         int idFlota = getIdFlota(this.dominioUnidad);

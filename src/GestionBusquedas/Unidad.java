@@ -94,9 +94,9 @@ public class Unidad {
      * @return indice: si el dominio exist en el sistema.
      * -1 : si el dominio nunca ha sido dado de alta.
      */
-    public int exist(String dominio){
+    public int exist(String inDominio){
         for (int i = 0; i < listaUnidades.length; i++) {
-            if (listaUnidades[i].getDominio().contentEquals(dominio)) {
+            if ((listaUnidades[i] != null) && (listaUnidades[i].dominio.equals(inDominio))) {
                 return i;
             }
         }
@@ -134,20 +134,6 @@ public class Unidad {
                 return i;
         }
         return -1;
-    }
-
-    public void addNuevaUnidad(){
-        int indice = nextDisponible();
-        if(indice >= 0 &&  indice < listaUnidades.length) {
-            listaUnidades[indice].setDominio(this.dominio);
-            listaUnidades[indice].setModelo(this.modelo);
-            listaUnidades[indice].setNroChasis(this.nroChasis);
-            listaUnidades[indice].setNroMotor(this.nroMotor);
-            listaUnidades[indice].setCarroceria(this.carroceria);
-            listaUnidades[indice].setActivo();
-        }
-        else
-            System.out.println("Unidad.addNuevaUnidad: No existe mas lugares donde insertar, disparar excepción !!");
     }
 
 }

@@ -14,7 +14,7 @@ public class CargarUnidad {
     private String nroResolucion;
     private String nroChasis;
     private String nroMotor;
-    private String nroCarroceria;
+    private String carroceria;
 
     /**
      * Constructor para dar el alta a una unidad.
@@ -22,7 +22,7 @@ public class CargarUnidad {
     public CargarUnidad(String dominio,int modelo,int nroInterno,
                         int nroRTO,String corredor,String cuitEmpresa,
                         String nroExpediente,String nroResolucion,String nroChasis,
-                        String nroMotor, String nroCarroceria ) {
+                        String nroMotor, String carroceria ) {
         this.dominio = dominio;
         this.modelo = modelo;
         this.nroInterno = nroInterno;
@@ -33,7 +33,7 @@ public class CargarUnidad {
         this.nroResolucion = nroResolucion;
         this.nroChasis = nroChasis;
         this.nroMotor = nroMotor;
-        this.nroCarroceria = nroCarroceria;
+        this.carroceria = carroceria;
     }
 
     public boolean isAntiguedadOK(int modelo){
@@ -108,13 +108,18 @@ public class CargarUnidad {
      * de la empresa.
      */
     public void altaNuevaUnidad(){
-        Unidad nuevaUnidad = new Unidad(this.dominio,this.modelo,this.nroChasis,this.nroMotor,this.nroCarroceria);
+        Unidad nuevaUnidad = new Unidad(this.dominio,this.modelo,this.nroChasis,this.nroMotor,this.carroceria);
         if(isAntiguedadOK(this.modelo)) {
             if (validarRTO(this.nroRTO)) {
                 if (validarEmpresaActiva(this.cuitEmpresa)) {
                     if (isUnidadInexistente(this.dominio)) {
-                        nuevaUnidad.addNuevaUnidad();
-                        asociarUnidadFlota();
+                        int indice = nuevaUnidad.nextDisponible();
+                        if(indice >= 0 &&  indice < Unidad.listaUnidades.length) {
+                            Unidad.listaUnidades[indice] = nuevaUnidad;
+                            asociarUnidadFlota();
+                        }else {
+                            System.out.print("CargarUnidad.altaNuevaUnidad: Overflow Unidad.listaUnidades !!");
+                        }
                     } else if (isUnidadInactiva(this.dominio)) {
                         nuevaUnidad.setUnidadActiva(this.dominio);
                         asociarUnidadFlota();

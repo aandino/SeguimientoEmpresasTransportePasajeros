@@ -65,7 +65,7 @@ public class RevisionTecnica {
 
     public int existRTO(int nroTecnica) {
         for (int i = 0; i < listaRTO.length; i++) {
-            if (listaRTO[i].getNroTecnica() == nroTecnica) {
+            if ((listaRTO[i] != null) &&(listaRTO[i].getNroTecnica() == nroTecnica)) {
                 return i;
             }
         }

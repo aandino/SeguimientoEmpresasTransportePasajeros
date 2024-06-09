@@ -50,7 +50,7 @@ public class Empresa {
 
     public int exist(String ciut) {
         for (int i = 0; i < listaEmpresas.length; i++) {
-            if (listaEmpresas[i].getCuit().equals(ciut)) {
+            if ( (listaEmpresas[i] != null) && (listaEmpresas[i].getCuit().equals(ciut)) ) {
                 return i;
             }
         }
