@@ -59,15 +59,14 @@ public class Empresa {
 
     /**
      * Quiero saber si la empresa además de existir en el sistema está activa.
+     * El uso de este metodo debe ir siempre acompañado del médoto exist().
+     * Primero validar que exist() retorne >= 0, el indice donde se encuetra el cuit.
      */
     public boolean isActive(String ciut){
         int indice = exist(ciut);
-        if(indice >= 0){
-            if (listaEmpresas[indice].getActiva())
-                return true;
-            else
-                return false;
-        } else
+        if(indice >= 0)
+            return listaEmpresas[indice].getActiva();
+        else
             return false;
         // Deberia lanzar una excepción: la empresa no se encuentra en la lista !!!
     }

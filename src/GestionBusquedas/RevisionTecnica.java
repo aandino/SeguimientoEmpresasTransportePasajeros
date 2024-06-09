@@ -72,6 +72,11 @@ public class RevisionTecnica {
         return -1;
     }
 
+    /**
+     * Utilizar este método "siempre" acompañado de existRTO() >= 0
+     * paa asegurar primero la existencia de la RTO y evitar cualquier condición indeseada.
+     *  @return false: ojo !! la RTO puede que no exista.
+     */
     public boolean isAprobe(int nroTecnica){
         int indice = existRTO(nroTecnica);
         if(indice >= 0)

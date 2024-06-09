@@ -1,7 +1,5 @@
 package GestionBusquedas;
-
 import java.time.LocalDate;
-
 
 public class Flota {
     private String cuitEmpresa;
@@ -19,7 +17,6 @@ public class Flota {
     public static Flota[] listaFlota = new Flota[10];
 
     static {
-
         listaFlota[0] = new Flota("30700786206","AC443NB",1
                 ,"EXP-4200398/21","046/17"
                 ,"San Luis - La Punta",200);
@@ -52,4 +49,107 @@ public class Flota {
         this.nroResolucionBaja = null;
         this.corredor = corredor;
     }
+
+    public Flota(String cuitEmpresa) {
+        this.cuitEmpresa = cuitEmpresa;
+    }
+
+    public String getCuitEmpresa() {
+        return this.cuitEmpresa;
+    }
+
+    public int getIdFlota() {
+        return this.idFlota;
+    }
+
+    public String getNroExpBajaUnidad() {
+        return this.nroExpBajaUnidad;
+    }
+
+    public LocalDate getFechaBajaUnidad() {
+        return this.fechaBajaUnidad;
+    }
+
+    public void setCuitEmpresa(String cuitEmpresa) {
+        this.cuitEmpresa = cuitEmpresa;
+    }
+
+    public void setDominioUnidad(String dominioUnidad) {
+        this.dominioUnidad = dominioUnidad;
+    }
+
+    public void setIdFlota(int idFlota) {
+        this.idFlota = idFlota;
+    }
+
+    public void setNroExpAltaUnidad(String nroExpAltaUnidad) {
+        this.nroExpAltaUnidad = nroExpAltaUnidad;
+    }
+
+    public void setNroExpBajaUnidad(String nroExpBajaUnidad) {
+        this.nroExpBajaUnidad = nroExpBajaUnidad;
+    }
+
+    public void setFechaAltaUnidad(LocalDate fechaAltaUnidad) {
+        this.fechaAltaUnidad = fechaAltaUnidad;
+    }
+
+    public void setFechaBajaUnidad(LocalDate fechaBajaUnidad) {
+        this.fechaBajaUnidad = fechaBajaUnidad;
+    }
+
+    public void setNroResolucionAlta(String nroResolucionAlta) {
+        this.nroResolucionAlta = nroResolucionAlta;
+    }
+
+    public void setNroResolucionBaja(String nroResolucionBaja) {
+        this.nroResolucionBaja = nroResolucionBaja;
+    }
+
+    public void setCorredor(String corredor) {
+        this.corredor = corredor;
+    }
+
+    public void setNroInterno(int nroInterno) {
+        this.nroInterno = nroInterno;
+    }
+
+    public int getIdFlota(String inCuitEmpresa){
+        for(Flota test : listaFlota){
+            if(test.getCuitEmpresa().equals(inCuitEmpresa)){
+                if(test.fechaBajaUnidad == null && test.nroExpBajaUnidad == null &&
+                        test.nroResolucionBaja == null)
+                    return test.getIdFlota();
+            }
+        }
+        return(-1);
+    }
+
+    public int nextDisponible(){
+        for (int i = 0; i < listaFlota.length; i++) {
+            if(listaFlota[i] == null)
+                return i;
+        }
+        return -1;
+    }
+
+    public void addUnidadFlota(){
+        int indice = nextDisponible();
+        int idFlota = getIdFlota(this.dominioUnidad);
+
+        if(indice >= 0 &&  idFlota >0) {
+            listaFlota[indice].setCuitEmpresa(this.cuitEmpresa);
+            listaFlota[indice].setDominioUnidad(this.dominioUnidad);
+            listaFlota[indice].setIdFlota(idFlota);
+            listaFlota[indice].setNroExpAltaUnidad(this.nroExpAltaUnidad);
+            listaFlota[indice].setNroResolucionAlta(this.nroResolucionAlta);
+            listaFlota[indice].setCorredor(this.corredor);
+            listaFlota[indice].setNroInterno(this.nroInterno);
+        }
+        else if(indice < 0)
+            System.out.println("No existe mas lugares donde insertar, disparar excepción !!");
+        else if (idFlota < 0)
+            System.out.println("No se encontro unidades para activas en la flota para esa empresaa, disparar excepción !!");
+    }
+
 }

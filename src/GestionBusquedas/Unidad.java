@@ -69,6 +69,26 @@ public class Unidad {
         this.activo = 1;
     }
 
+    public void setDominio(String dominio) {
+        this.dominio = dominio;
+    }
+
+    public void setModelo(int modelo) {
+        this.modelo = modelo;
+    }
+
+    public void setNroChasis(String nroChasis) {
+        this.nroChasis = nroChasis;
+    }
+
+    public void setNroMotor(String nroMotor) {
+        this.nroMotor = nroMotor;
+    }
+
+    public void setCarroceria(String carroceria) {
+        this.carroceria = carroceria;
+    }
+
     /**
      * Quiero saber si la unidad esta/estuvo registrada en el sistema.
      * @return indice: si el dominio exist en el sistema.
@@ -105,7 +125,7 @@ public class Unidad {
         if(indice >= 0)
             listaUnidades[indice].setActivo();
         else
-            System.out.println("La unidad no existe disparar excepción !!");
+            System.out.println("Unidad.setUnidadActiva: La unidad no existe disparar excepción !!");
     }
 
     public int nextDisponible(){
@@ -116,12 +136,18 @@ public class Unidad {
         return -1;
     }
 
-    public void crearNuevaUnidad(Unidad nuevaUnidad){
+    public void addNuevaUnidad(){
         int indice = nextDisponible();
-        if(indice >= 0 &&  indice < listaUnidades.length)
-            listaUnidades[indice] = nuevaUnidad;
+        if(indice >= 0 &&  indice < listaUnidades.length) {
+            listaUnidades[indice].setDominio(this.dominio);
+            listaUnidades[indice].setModelo(this.modelo);
+            listaUnidades[indice].setNroChasis(this.nroChasis);
+            listaUnidades[indice].setNroMotor(this.nroMotor);
+            listaUnidades[indice].setCarroceria(this.carroceria);
+            listaUnidades[indice].setActivo();
+        }
         else
-            System.out.println("No existe mas lugares donde insertar, disparar excepción !!");
+            System.out.println("Unidad.addNuevaUnidad: No existe mas lugares donde insertar, disparar excepción !!");
     }
 
 }
