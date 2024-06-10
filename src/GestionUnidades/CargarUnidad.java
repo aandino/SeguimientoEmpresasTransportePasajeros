@@ -123,20 +123,20 @@ public class CargarUnidad {
             return(-1);
     }
 
+    /**
+     * Método que realiza la relación Unidad - Flota - Empresa.
+     * Carga un registro en la table flota de la correspondiente relación.  
+     */
     public void asociarUnidadFlota(){
         int idFlotaEmpresa = getIdFlotaActiva(this.cuitEmpresa);
         if(idFlotaEmpresa >= 0){
             Flota UnidadFlota = new Flota(this.cuitEmpresa,this.dominio,idFlotaEmpresa,
                     this.nroExpediente, this.nroResolucion, this.corredor,this.nroInterno);
             int indice = UnidadFlota.nextDisponible();
-            if((indice >= 0 && indice < Flota.listaFlota.length) && (isUnidadInexistente(this.dominio) || isUnidadInactiva(this.dominio)) ){
+            if((indice >= 0 && indice < Flota.listaFlota.length) ){
                 Flota.listaFlota[indice] = UnidadFlota;
             }else {
-                System.out.println("CargarUnidad.asociarUnidadFlota lines 100");
-                System.out.println("Valor de indice: "+indice);
-                System.out.println("isUnidadInexistente(this.dominio): "+isUnidadInexistente(this.dominio));
-                System.out.println("isUnidadInactiva(this.dominio): "+isUnidadInactiva(this.dominio));
-                System.out.println("existe la unidad: "+(new Unidad(this.dominio).exist(this.dominio)));
+                throw new IllegalArgumentException("ERROR CargarUnidad.asociarUnidadFlota");
             }
         } else if (idFlotaEmpresa < 0) {
             System.out.println("CargarUnidad.asociarUnidadFlota: No se localizo ninguna Unidad en flota que no haya sido daba de baja !!");
@@ -179,6 +179,10 @@ public class CargarUnidad {
         }
     }
 
+    /**
+     * Solo a fines prácticos para mostrar los datos presentes en Unidad.listaUnidades
+     * para poder verificar la carga de datos.
+     */
     public static void imprimirUnidades(){
         System.out.println("Listado de Unidades: ");
         for (int i = 0; i < Unidad.listaUnidades.length; i++) {
@@ -189,7 +193,10 @@ public class CargarUnidad {
             }
         }
     }
-
+    /**
+     * Solo a fines prácticos para mostrar los datos presentes en Flota.listaFlota
+     * para poder verificar la carga de datos.
+     */
     public static void imprimirFlota(){
         System.out.println("Listado de la Flota: ");
         for(int i = 0; i < Flota.listaFlota.length; i++){

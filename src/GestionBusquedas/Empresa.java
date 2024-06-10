@@ -87,7 +87,7 @@ public class Empresa {
 
     /**
      * Quiero saber si la empresa esta/estuvo registrada en el sistema.
-     * @param cuit de la empresa de la cual estoy realizando la búsqueda.
+     * CUIT la empresa de la cual estoy realizando la búsqueda.
      * @return [indíce] donde haya el registro -1 si no está.
      */
 

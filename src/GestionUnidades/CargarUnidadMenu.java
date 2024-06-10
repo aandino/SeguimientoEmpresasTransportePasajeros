@@ -209,7 +209,7 @@ public class CargarUnidadMenu {
      */
 
     /**
-     * Cada funcionalidad
+     * Validación de los datos de entrada.
      * @param dominio, corredor, modelo, nroInterno: todos deben coincidir con su
      *                 formato y tipo establecido en los parámetros de clase.
      * @return true: se cumple las condiciones de formato de datos según sea necesario.

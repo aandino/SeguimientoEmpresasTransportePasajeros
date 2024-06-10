@@ -66,6 +66,10 @@ public class Flota {
                 ,"San Luis - Potrero",110);
     }
 
+    /**
+     *
+     * Constructor principal para crear la relación Unidad - Flora - Empresa.
+     */
     public Flota(String cuitEmpresa, String dominioUnidad,
                  int idFlota, String nroExpAltaUnidad,String nroResolucionAlta,
                  String corredor,int nroInterno) {
@@ -177,7 +181,7 @@ public class Flota {
     }
 
     /**
-     *
+     * @deprecated
      */
     public void addUnidadFlota(){
         int indice = nextDisponible();
@@ -197,5 +201,4 @@ public class Flota {
         else if (idFlota < 0)
             System.out.println("No se encontro unidades para activas en la flota para esa empresaa, disparar excepción !!");
     }
-
 }
