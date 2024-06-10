@@ -30,7 +30,14 @@ import java.time.LocalDate;
 import java.time.Period;
 import GestionBusquedas.*;
 
+/**
+ * Clase controladora Cargar Unidad: es la responsable de llevar
+ * adelante el CU07 - CargarUnidad.
+ */
 public class CargarUnidad {
+    /**
+     * Definicion de los atributos de la clase.
+     */
     private String dominio;
     private int nroInterno;
     private int nroRTO;
@@ -45,6 +52,7 @@ public class CargarUnidad {
 
     /**
      * Constructor para dar el alta a una unidad.
+     * @param nroRTO: número revisión técnica o nroTecnica.
      */
     public CargarUnidad(String dominio,int modelo,int nroInterno,
                         int nroRTO,String corredor,String cuitEmpresa,

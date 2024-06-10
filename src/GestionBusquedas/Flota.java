@@ -1,3 +1,30 @@
+/**
+ * Set de Prueba para dar de alta una unidad.
+ *
+ * Pre-Requisito:
+ *  Debe estar cargada la relación Unidad-RevisionTecnica.
+ *  Para este caso se suministra la relación en:
+ *  RevisionTecnica.listaRTO[4] = new RevisionTecnica(2606,"AA381BB",120,1,1);
+ *  Donde se refleja que la unidad con dominio:AA381BB se le asignó el
+ *  nro de técnica "2606", la cual está aprobada, bit 1 final.
+ *  El sistema no permite cargar una nueva unidad que no haya pasado
+ *  el proceso de revision técnica obligatoria, es decir un registro
+ *  RevisionTecnica.listaRTO.
+ *
+ *  Datos Unidad:
+ *      Dominio: AA381BB
+ *      Modelo: 2016
+ *      Nro. Interno: 120
+ *      Corredor: San Luis - La Carolina
+ *      Nro. Revision Técnica: 2606
+ *      CUIT: 30710760965
+ *      EXP de Alta: EXP-1290150/22
+ *      Resolución: 44/11
+ *      Nro. Chasis: 8BBC51A1AGM001214
+ *      Nro. Motor: DCA000280
+ *      Carrocería: TODOBUS
+ */
+
 package GestionBusquedas;
 import java.time.LocalDate;
 
@@ -13,9 +40,14 @@ public class Flota {
     private String nroResolucionBaja;
     private String corredor;
     private int nroInterno;
+    /**
+     * listaFlota: Array que mantiene la relación Unidad-Flota-Empresa.
+     * Es estática a modo de mantener persistencia temporal de los
+     * datos y ser alcanzada desde otras clases, sin la necesidad de
+     * instanciar objetos de clase.
+     */
 
     public static Flota[] listaFlota = new Flota[10];
-
     static {
         listaFlota[0] = new Flota("30700786206","AC443NB",1
                 ,"EXP-4200398/21","046/17"
@@ -50,6 +82,13 @@ public class Flota {
         this.corredor = corredor;
     }
 
+    /**
+     * Polimorfismo.
+     * Constructor para poder acceder a los métodos de la clase
+     * cuando el único objetivo es obtener información sobre la
+     * existencia de una empresa.
+     * @param cuitEmpresa
+     */
     public Flota(String cuitEmpresa) {
         this.cuitEmpresa = cuitEmpresa;
     }

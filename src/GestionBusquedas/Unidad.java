@@ -69,6 +69,7 @@ public class Unidad {
     }
 
     /**
+     * Polimorfismo.
      * Constructor para cuando "solo" se van a realizar consultas
      * sobre una unidad determinada, exista o no.
      * @param dominio
@@ -119,7 +120,7 @@ public class Unidad {
 
     /**
      * Quiero saber si la unidad esta/estuvo registrada en el sistema.
-     * @return indice: si el dominio exist en el sistema.
+     * @return índice: si el dominio exist en el sistema.
      * -1 : si el dominio nunca ha sido dado de alta.
      */
     public int exist(String inDominio){
@@ -146,12 +147,13 @@ public class Unidad {
             return listaUnidades[indice].getActivo();
         else
             return false;
-        // Deberia lanzar una excepción la unidad no existe !!!
-        // Ojo !! puedo pensar que la unidad esta inactiva cuando en
-        // realidad no existe !!
     }
 
-
+    /**
+     * Activo una unidad que en algún momento estuvo vinculada a una
+     * empresa. Debe existir en el sistema y estar inactiva = 0.
+     * @param dominio
+     */
     public void setUnidadActiva(String dominio){
         int indice = exist(dominio);
         if(indice >= 0)
@@ -160,6 +162,10 @@ public class Unidad {
             System.out.println("Unidad.setUnidadActiva: La unidad no existe disparar excepción !!");
     }
 
+    /**
+     * Busco el siguiente lugar libre en el array de Unidades.
+     * @return [índice] de primer match == null.
+     */
     public int nextDisponible(){
         for (int i = 0; i < listaUnidades.length; i++) {
             if(listaUnidades[i] == null)

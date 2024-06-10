@@ -1,7 +1,31 @@
+/**
+ * Set de Prueba para dar de alta una unidad.
+ *
+ * Pre-Requisito:
+ *  Debe estar cargada la relación Unidad-RevisionTecnica.
+ *  Para este caso se suministra la relación en:
+ *  RevisionTecnica.listaRTO[4] = new RevisionTecnica(2606,"AA381BB",120,1,1);
+ *  Donde se refleja que la unidad con dominio:AA381BB se le asignó el
+ *  nro de técnica "2606", la cual está aprobada, bit 1 final.
+ *  El sistema no permite cargar una nueva unidad que no haya pasado
+ *  el proceso de revision técnica obligatoria, es decir un registro
+ *  RevisionTecnica.listaRTO.
+ *
+ *  Datos Unidad:
+ *      Dominio: AA381BB
+ *      Modelo: 2016
+ *      Nro. Interno: 120
+ *      Corredor: San Luis - La Carolina
+ *      Nro. Revision Técnica: 2606
+ *      CUIT: 30710760965
+ *      EXP de Alta: EXP-1290150/22
+ *      Resolución: 44/11
+ *      Nro. Chasis: 8BBC51A1AGM001214
+ *      Nro. Motor: DCA000280
+ *      Carrocería: TODOBUS
+ */
+
 package GestionBusquedas;
-
-// Clase ENTIDAD RevisionTecnica (RTO)
-
 import java.time.LocalDate;
 
 public class RevisionTecnica {
@@ -20,6 +44,11 @@ public class RevisionTecnica {
         listaRTO[3] = new RevisionTecnica(2605,"KIA817",110,1,1);
         listaRTO[4] = new RevisionTecnica(2606,"AA381BB",120,1,1);
     }
+
+     /** Polimorfismo.
+     * Constructor para cuando "solo" se van a realizar consultas
+     * sobre una unidad determinada, exista o no.
+     */
 
     public RevisionTecnica(int nroTecnica) {
         this.nroTecnica = nroTecnica;
@@ -62,6 +91,12 @@ public class RevisionTecnica {
         return listaRTO;
     }
 
+    /**
+     * Método para determinar si el nroTecnica subministrado existe en el sistema
+     * y a su vez si esta ha sido aprobada.
+     * @param nroTecnica
+     * @return [indice] donde se encontró o -1 sino existe.
+     */
     public int existRTO(int nroTecnica) {
         for (int i = 0; i < listaRTO.length; i++) {
             if ((listaRTO[i] != null) &&(listaRTO[i].getNroTecnica() == nroTecnica)) {
