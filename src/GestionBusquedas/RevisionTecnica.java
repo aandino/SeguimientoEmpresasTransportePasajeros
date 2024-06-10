@@ -13,7 +13,6 @@ public class RevisionTecnica {
     private LocalDate fechaEmisionRTO;
 
     public static RevisionTecnica[] listaRTO = new RevisionTecnica[6];
-
     static{
         listaRTO[0] = new RevisionTecnica(2602,"AC443NB",200,1,1);
         listaRTO[1] = new RevisionTecnica(2603,"AA381BF",121,1,1);

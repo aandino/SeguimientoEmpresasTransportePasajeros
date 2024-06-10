@@ -9,7 +9,6 @@ public class Empresa {
     private int activa;
 
     public static Empresa[] listaEmpresas = new Empresa[2];
-
     static{
         listaEmpresas[0] = new Empresa("30700786206","Blanca Paloma srl","Av. libertador general san martin 91",
                 "administracion@blancapaloma.com");
