@@ -151,11 +151,7 @@ public class CargarUnidadMenu {
                     this.itemCuitEmpresa,this.itemNroExpediente,this.itemNroResolucion,
                     this.nroChasis,this.nroMotor,this.carroceria);
             cargarUnidad.altaNuevaUnidad();
-            /*
-            CargarUnidad.imprimirUnidades();
-            CargarUnidad.imprimirFlota();
 
-             */
         }
         catch (Exception e) {
             System.out.println("ERROR: No se puede ingresar la nueva unidad");
