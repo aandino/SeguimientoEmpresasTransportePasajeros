@@ -16,7 +16,7 @@ public class Unidad {
         listaUnidades[0] = new Unidad("AC443NB", 2018,
                "9BM384067HB000047", "924997U1170000", "ITALBUS");
 
-        listaUnidades[1] = new Unidad("AA381BF",2016,
+            listaUnidades[1] = new Unidad("AA381BF",2016,
                 "9BM384067HB035047","924997U1175569","ITALBUS");
 
         listaUnidades[2] = new Unidad("JQJ193",2011,
@@ -27,7 +27,18 @@ public class Unidad {
 /**
  * Datos de prueba - esta mal hay que sacar nroInterno, corredor, nroExp,nroResolucion
  *       listaUnidades[4] = new Unidad("AA381BB",2016,2606,120,"San Luis - La Carolina","30710760965",
- *               "EXP-1290150/22","44/11","8BBC51A1AGM001214","DCA000280","TODO BUS");
+ *               "EXP-1290150/22","44/11","8BBC51A1AGM001214","DCA000280","TODOBUS");
+ *               AA381BB
+ *               2016
+ *               120
+ *               San Luis - La Carolina
+ *               2606
+ *               30710760965
+ *               EXP-1290150/22
+ *               44/11
+ *               8BBC51A1AGM001214
+ *               DCA000280
+ *               TODOBUS
  */
     }
 
@@ -55,6 +66,10 @@ public class Unidad {
 
     public String getDominio() {
         return dominio;
+    }
+
+    public String getNroChasis() {
+        return this.nroChasis;
     }
 
     public boolean getActivo() {
@@ -97,7 +112,11 @@ public class Unidad {
     public int exist(String inDominio){
         for (int i = 0; i < listaUnidades.length; i++) {
             if ((listaUnidades[i] != null) && (listaUnidades[i].dominio.equals(inDominio))) {
-                return i;
+                if (listaUnidades[i] == null)
+                    return(-1);
+                else if (listaUnidades[i].dominio.equals(inDominio)) {
+                    return(i);
+                }
             }
         }
         return -1;

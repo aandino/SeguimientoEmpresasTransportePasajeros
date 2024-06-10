@@ -11,7 +11,7 @@ public class Empresa {
     public static Empresa[] listaEmpresas = new Empresa[2];
 
     static{
-        listaEmpresas[0] = new Empresa("30700786206","Blanca Paloma srl","av. libertador general san martin 91",
+        listaEmpresas[0] = new Empresa("30700786206","Blanca Paloma srl","Av. libertador general san martin 91",
                 "administracion@blancapaloma.com");
         listaEmpresas[1] = new Empresa("30710760965","Grupo MR SRL","Benedicto Morales 265",
                 "administracion@mr.com.ar");

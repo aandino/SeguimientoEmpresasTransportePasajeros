@@ -151,6 +151,11 @@ public class CargarUnidadMenu {
                     this.itemCuitEmpresa,this.itemNroExpediente,this.itemNroResolucion,
                     this.nroChasis,this.nroMotor,this.carroceria);
             cargarUnidad.altaNuevaUnidad();
+            /*
+            CargarUnidad.imprimirUnidades();
+            CargarUnidad.imprimirFlota();
+
+             */
         }
         catch (Exception e) {
             System.out.println("ERROR: No se puede ingresar la nueva unidad");
@@ -196,35 +201,4 @@ public class CargarUnidadMenu {
         return (cadena != null && !cadena.trim().isEmpty() && cadena.length() <30);
     }
 
-    public void display() {
-        System.out.print("--- MENUA CARGAR UNIDAD ---");
-        System.out.println("");
-        System.out.print("Dominio: ");
-        this.itemDominio = scanner.nextLine();
-        System.out.print("Modelo: ");
-        this.itemModelo = scanner.nextInt();
-        System.out.print("Nro Interno: ");
-        this.itemNroInterno = scanner.nextInt();
-        scanner.nextLine(); // Consumir nueva línea
-        System.out.print("Corredor: ");
-        this.itemCorredor = scanner.nextLine();
-        System.out.print("Nro RTO: ");
-        this.itemNroRTO = scanner.nextInt();
-        scanner.nextLine(); // Consumir nueva línea
-        System.out.print("CUIT Empresa: ");
-        this.itemCuitEmpresa = scanner.nextLine();
-        System.out.print("Nro Expediente: ");
-        this.itemNroExpediente = scanner.nextLine();
-        System.out.print("Nro Resolución: ");
-        this.itemNroResolucion = scanner.nextLine();
-
-        System.out.println("Cargar/Cancelar: ");
-        String decision = scanner.nextLine();
-        if ("Cargar".equalsIgnoreCase(decision)) {
-            // Lógica para cargar la unidad
-            System.out.println("Unidad cargada.");
-        } else {
-            System.out.println("Operación cancelada.");
-        }
-    }
 }

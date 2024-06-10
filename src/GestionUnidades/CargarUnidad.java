@@ -62,7 +62,7 @@ public class CargarUnidad {
      * @return true: la unidad no existe, indice == -1 (no encontró el dominio en el array)
      */
     public boolean isUnidadInexistente(String inDominio){
-        return(new Unidad(inDominio).exist(inDominio) < 0);
+        return((new Unidad(inDominio).exist(inDominio)) < 0);
     }
 
     /**
@@ -71,7 +71,7 @@ public class CargarUnidad {
      * pero actualmente su estado es inactivo (unidad.activo=0).
      */
     public boolean isUnidadInactiva(String inDomino){
-        if(! isUnidadInexistente(inDomino) && !(new Unidad(inDomino).isActive(inDomino)))
+        if(! isUnidadInexistente(inDomino) && !((new Unidad(inDomino).isActive(inDomino))))
             return true;
         else
             return false;
@@ -90,18 +90,25 @@ public class CargarUnidad {
 
     public void asociarUnidadFlota(){
         int idFlotaEmpresa = getIdFlotaActiva(this.cuitEmpresa);
-        if((idFlotaEmpresa >= 0) && (isUnidadInexistente(this.dominio) || isUnidadInactiva(this.dominio)) ){
-            Flota agregarUnidadFlota = new Flota(this.cuitEmpresa,this.dominio,idFlotaEmpresa,
+        if(idFlotaEmpresa >= 0){
+            Flota UnidadFlota = new Flota(this.cuitEmpresa,this.dominio,idFlotaEmpresa,
                     this.nroExpediente, this.nroResolucion, this.corredor,this.nroInterno);
-            agregarUnidadFlota.addUnidadFlota();
+            int indice = UnidadFlota.nextDisponible();
+            if((indice >= 0 && indice < Flota.listaFlota.length) && (isUnidadInexistente(this.dominio) || isUnidadInactiva(this.dominio)) ){
+                Flota.listaFlota[indice] = UnidadFlota;
+            }else {
+                System.out.println("CargarUnidad.asociarUnidadFlota lines 100");
+                System.out.println("Valor de indice: "+indice);
+                System.out.println("isUnidadInexistente(this.dominio): "+isUnidadInexistente(this.dominio));
+                System.out.println("isUnidadInactiva(this.dominio): "+isUnidadInactiva(this.dominio));
+                System.out.println("existe la unidad: "+(new Unidad(this.dominio).exist(this.dominio)));
+            }
         } else if (idFlotaEmpresa < 0) {
             System.out.println("CargarUnidad.asociarUnidadFlota: No se localizo ninguna Unidad en flota que no haya sido daba de baja !!");
         } else if (isUnidadInexistente(this.dominio)) {
             System.out.println("CargarUnidad.asociarUnidadFlota: El dominio existe 'o' esta activo. !!");
         }
     }
-
-
 
     /***
      * crear una nueva unidad en la DB y asociar está a la flota
@@ -134,6 +141,28 @@ public class CargarUnidad {
             }
         } else {
             System.out.print("CargarUnidad.altaNuevaUnidad: la unidad supera los 15 años  !!");
+        }
+    }
+
+    public static void imprimirUnidades(){
+        System.out.println("Listado de Unidades: ");
+        for (int i = 0; i < Unidad.listaUnidades.length; i++) {
+            if ((Unidad.listaUnidades[i] != null)) {
+                System.out.print("Dominio: "+Unidad.listaUnidades[i].getDominio()+"-");
+                System.out.print("Modelo: "+Unidad.listaUnidades[i].getModelo()+"-");
+                System.out.println("NroChasis: "+Unidad.listaUnidades[i].getNroChasis());
+            }
+        }
+    }
+
+    public static void imprimirFlota(){
+        System.out.println("Listado de la Flota: ");
+        for(int i = 0; i < Flota.listaFlota.length; i++){
+            if ((Flota.listaFlota[i] != null)) {
+                System.out.print("CUIT: "+Flota.listaFlota[i].getCuitEmpresa()+"-");
+                System.out.print("idFlota: "+Flota.listaFlota[i].getIdFlota()+"-");
+                System.out.println("Dominio: "+Flota.listaFlota[i].getDominioUnidad());
+            }
         }
     }
 }

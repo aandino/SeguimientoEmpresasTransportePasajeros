@@ -54,6 +54,10 @@ public class Flota {
         this.cuitEmpresa = cuitEmpresa;
     }
 
+    public String getDominioUnidad() {
+        return this.dominioUnidad;
+    }
+
     public String getCuitEmpresa() {
         return this.cuitEmpresa;
     }
@@ -134,7 +138,7 @@ public class Flota {
     }
 
     /**
-     * ESTA MAL SE DEBE EJECUTAR DESDE LA CLASE CONTROLADORA NO DESDE ACA !!!!
+     *
      */
     public void addUnidadFlota(){
         int indice = nextDisponible();
