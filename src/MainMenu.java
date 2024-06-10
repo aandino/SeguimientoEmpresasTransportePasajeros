@@ -1,14 +1,29 @@
 import java.util.Scanner;
-import java.io.IOException;
 import GestionUnidades.*;
 
+/**
+ * A posteriori todas las clases de tipo menu heredarán (extemd) a una
+ * clase superior Menu.java todas las funcionalidades comunes, como los
+ * métodos referentes a la validación de entradas de usuarios.
+ */
+
+/**
+ * La clase MainMenu: será la primera interacción con el usuario, la que dara
+ * el acceso a los demás CU que se vayan implementando.
+ */
 public class MainMenu {
     private Scanner scanner = new Scanner(System.in);
 
-    public static void clearConsole() {
+    /**
+     * Método para limpiar las salidas de consola agregando nuevas lineas.
+     */
+    public void clearConsole() {
         for (int i = 0; i < 50; ++i) System.out.println();
     }
 
+    /**
+     * @summary
+     */
     public void display() {
         while (true) {
             System.out.println("===================");
@@ -18,7 +33,7 @@ public class MainMenu {
             System.out.println("1) Cargar Nueva Unidad");
             System.out.println("2) Mostar Unidades");
             System.out.println("3) Mostrar Flota");
-            System.out.print("Leer opcion: ");
+            System.out.print("Leer opción: ");
             int opcion = scanner.nextInt();
             scanner.nextLine();  // Consumir nueva línea
 

@@ -9,9 +9,13 @@ public class Unidad {
     private String nroMotor;
     private String carroceria;
     private int activo;
+    /**
+     * listaUnidades: Array de unidades.
+     * La misma ha sido estática a modo de mantener persistencia temporal de los
+     * datos y ser alcanzada desde otras clases.
+     */
 
     public static Unidad[] listaUnidades = new Unidad[6];
-
     static {
         listaUnidades[0] = new Unidad("AC443NB", 2018,
                "9BM384067HB000047", "924997U1170000", "ITALBUS");
@@ -44,6 +48,7 @@ public class Unidad {
 
     /**
      * Constructor para crear una nueva unidad no existente.
+     *
      */
     public Unidad(String dominio,int modelo,
                   String nroChasis,String nroMotor, String carroceria) {

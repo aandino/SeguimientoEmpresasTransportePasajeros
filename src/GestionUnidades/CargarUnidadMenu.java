@@ -2,6 +2,12 @@ package GestionUnidades;
 import java.util.Scanner;
 import java.time.LocalDate;
 
+/**
+ * A posteriori todas las clases de tipo menu heredarán (extemd) a una
+ * clase superior Menu.java todas las funcionalidades comunes, como los
+ * métodos referentes a la validación de entradas de usuarios.
+ */
+
 public class CargarUnidadMenu {
 
     private Scanner scanner = new Scanner(System.in);
@@ -19,6 +25,11 @@ public class CargarUnidadMenu {
 
     private CargarUnidad cargarUnidad;
 
+    /**
+     * El constructor la clase CargarUnidadMenu.java es el encargado
+     * de mostrar el menu para que el usuario pueda ingresar los datos
+     * necesarios para la que la aplicación inicie la carga de una nueva unidad.
+     */
     public CargarUnidadMenu() {
         System.out.println("--- MENU CARGAR UNIDAD ---");
         System.out.println("");
