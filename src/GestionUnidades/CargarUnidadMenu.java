@@ -34,6 +34,10 @@ public class CargarUnidadMenu {
         System.out.println("--- MENU CARGAR UNIDAD ---");
         System.out.println("");
         System.out.print("Dominio: ");
+        /**
+         * Se utilzan excepciones para validar los datos ingresados
+         * y mantener bajo control el flujo de ejecución del programa.
+         */
         try {
             this.itemDominio = scanner.nextLine().trim();
             if (!validarDominio(this.itemDominio)) {
@@ -171,6 +175,18 @@ public class CargarUnidadMenu {
         }
     }
 
+    /**
+     * A posteriori todas las clases de tipo menu heredarán (extend) a una
+     * clase superior Menu.java todas las funcionalidades comunes, como los
+     * métodos referentes a la validación de entradas de usuarios.
+     */
+
+    /**
+     * Cada funcionalidad
+     * @param dominio, corredor, modelo, nroInterno: todos deben coincidir con su
+     *                 formato y tipo establecido en los parámetros de clase.
+     * @return true: se cumple las condiciones de formato de datos según sea necesario.
+     */
     public boolean validarDominio(String dominio) {
         return( dominio != null && dominio.matches("[A-Z0-9]{6,8}"));
     }

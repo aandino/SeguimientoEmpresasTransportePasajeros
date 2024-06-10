@@ -10,6 +10,7 @@ import GestionUnidades.*;
 /**
  * La clase MainMenu: será la primera interacción con el usuario, la que dara
  * el acceso a los demás CU que se vayan implementando.
+ * Por el momento solo se provee la funcionalidad necesaria para el CU actual.
  */
 public class MainMenu {
     private Scanner scanner = new Scanner(System.in);
@@ -22,7 +23,7 @@ public class MainMenu {
     }
 
     /**
-     * @summary
+     *
      */
     public void display() {
         while (true) {
