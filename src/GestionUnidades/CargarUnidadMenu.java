@@ -172,7 +172,7 @@ public class CargarUnidadMenu {
             if(!validarCadena(this.nroMotor))
                 throw new IllegalArgumentException("ERROR formato Nro Motor");
         }
-        catch (Exception e) {
+        catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return;
         }
