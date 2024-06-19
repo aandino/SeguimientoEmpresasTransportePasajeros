@@ -1,3 +1,5 @@
+package GestionInterfaces;
+
 import java.util.Scanner;
 import GestionUnidades.*;
 
@@ -8,7 +10,7 @@ import GestionUnidades.*;
  */
 
 /**
- * La clase MainMenu: será la primera interacción con el usuario, la que dara
+ * La clase GestionInterfaces.MainMenu: será la primera interacción con el usuario, la que dara
  * el acceso a los demás CU que se vayan implementando.
  * Por el momento solo se provee la funcionalidad necesaria para el CU actual.
  */

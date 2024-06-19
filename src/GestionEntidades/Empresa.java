@@ -25,7 +25,7 @@
  *      Carrocería: TODOBUS
  */
 
-package GestionBusquedas;
+package GestionEntidades;
 
 /**
  * Clase entidad Empresa: es la capa de persistencia

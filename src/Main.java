@@ -34,6 +34,8 @@
  * @author Alejandro Andino.
  */
 
+import GestionInterfaces.MainMenu;
+
 /**
  * Set de Prueba para dar de alta una unidad.
  *

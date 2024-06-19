@@ -1,4 +1,4 @@
-package GestionBusquedas;
+package GestionEntidades;
 /**
  * Set de Prueba para dar de alta una unidad.
  *
@@ -25,12 +25,6 @@ package GestionBusquedas;
  *      Nro. Motor: DCA000280
  *      Carrocería: TODOBUS
  */
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
 
 
 public class Unidad {

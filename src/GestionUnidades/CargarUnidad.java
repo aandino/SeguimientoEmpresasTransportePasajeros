@@ -28,7 +28,7 @@
 package GestionUnidades;
 import java.time.LocalDate;
 import java.time.Period;
-import GestionBusquedas.*;
+import GestionEntidades.*;
 
 /**
  * Clase controladora Cargar Unidad: es la responsable de llevar

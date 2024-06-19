@@ -25,7 +25,7 @@
  *      Carrocería: TODOBUS
  */
 
-package GestionBusquedas;
+package GestionEntidades;
 import java.time.LocalDate;
 
 public class Flota {

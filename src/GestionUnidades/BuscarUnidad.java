@@ -1,4 +1,7 @@
-package GestionBusquedas;
+package GestionUnidades;
+
+import GestionInterfaces.Buscar;
+import GestionEntidades.Unidad;
 
 public class BuscarUnidad extends Buscar {
     private String dominio;

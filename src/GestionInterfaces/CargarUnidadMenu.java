@@ -25,7 +25,9 @@
  *      Carrocería: TODOBUS
  */
 
-package GestionUnidades;
+package GestionInterfaces;
+import GestionUnidades.CargarUnidad;
+
 import java.util.Scanner;
 import java.time.LocalDate;
 

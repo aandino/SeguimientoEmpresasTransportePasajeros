@@ -1,4 +1,4 @@
-package GestionBusquedas;
+package GestionInterfaces;
 
 public class RevisionTecnicaMenu {
 }

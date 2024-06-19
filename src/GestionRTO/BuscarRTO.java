@@ -1,8 +1,11 @@
-package GestionBusquedas;
+package GestionRTO;
 
 // Este es la clase controlador BuscarRTO
 
-public class BuscarRTO extends  Buscar{
+import GestionInterfaces.Buscar;
+import GestionEntidades.RevisionTecnica;
+
+public class BuscarRTO extends Buscar {
     private int nroTecnica;
     private RevisionTecnica Rto;
     private String dominio ="";
