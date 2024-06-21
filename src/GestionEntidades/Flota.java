@@ -26,7 +26,10 @@
  */
 
 package GestionEntidades;
+import GestionEntidades.BaseDatos.MysqlConect;
 import java.time.LocalDate;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Flota {
     private String cuitEmpresa;
@@ -97,71 +100,43 @@ public class Flota {
         this.cuitEmpresa = cuitEmpresa;
     }
 
-    public String getDominioUnidad() {
-        return this.dominioUnidad;
+    public int getIdFlota() {
+        return idFlota;
     }
 
     public String getCuitEmpresa() {
-        return this.cuitEmpresa;
+        return cuitEmpresa;
     }
 
-    public int getIdFlota() {
-        return this.idFlota;
-    }
-
-    public String getNroExpBajaUnidad() {
-        return this.nroExpBajaUnidad;
-    }
-
-    public LocalDate getFechaBajaUnidad() {
-        return this.fechaBajaUnidad;
-    }
-
-    public void setCuitEmpresa(String cuitEmpresa) {
-        this.cuitEmpresa = cuitEmpresa;
-    }
-
-    public void setDominioUnidad(String dominioUnidad) {
-        this.dominioUnidad = dominioUnidad;
-    }
-
-    public void setIdFlota(int idFlota) {
-        this.idFlota = idFlota;
-    }
-
-    public void setNroExpAltaUnidad(String nroExpAltaUnidad) {
-        this.nroExpAltaUnidad = nroExpAltaUnidad;
-    }
-
-    public void setNroExpBajaUnidad(String nroExpBajaUnidad) {
-        this.nroExpBajaUnidad = nroExpBajaUnidad;
-    }
-
-    public void setFechaAltaUnidad(LocalDate fechaAltaUnidad) {
-        this.fechaAltaUnidad = fechaAltaUnidad;
-    }
-
-    public void setFechaBajaUnidad(LocalDate fechaBajaUnidad) {
-        this.fechaBajaUnidad = fechaBajaUnidad;
-    }
-
-    public void setNroResolucionAlta(String nroResolucionAlta) {
-        this.nroResolucionAlta = nroResolucionAlta;
-    }
-
-    public void setNroResolucionBaja(String nroResolucionBaja) {
-        this.nroResolucionBaja = nroResolucionBaja;
-    }
-
-    public void setCorredor(String corredor) {
-        this.corredor = corredor;
-    }
-
-    public void setNroInterno(int nroInterno) {
-        this.nroInterno = nroInterno;
+    public String getDominioUnidad() {
+        return dominioUnidad;
     }
 
     public int getIdFlota(String inCuitEmpresa){
+        int idEmpresa;
+        int idContrato;
+        ResultSet resultado = null;
+        ResultSet resulIdFlota = null;
+        try{
+            MysqlConect con = new MysqlConect();
+            resultado = con.runQuery("idContrato","Contrato","nroExpBajaEmpresa = NULL AND Empresa_cuit",inCuitEmpresa);
+            if (resultado.next()) {
+                idContrato = resultado.getInt("idContrato");
+                resulIdFlota = con.runQuery("idFlota","Flota","Contrato_idContrato",idContrato);
+                if (resulIdFlota.next())
+                    return(resulIdFlota.getInt("IdFlota"));
+                else
+                    throw new SQLException("NO EXISTE UNA FLOTA ACTIVA Flota.getIdFlota linea 117");
+            }
+            else
+                throw new SQLException("NO EXISTE UN CONTRATO VIGENTE Flota.getIdFlota linea 111");
+        }catch (SQLException sql){
+            sql.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int getIdFlota(String inCuitEmpresa, String algo){
         for(Flota test : listaFlota){
             if(test.getCuitEmpresa().equals(inCuitEmpresa)){
                 if(test.fechaBajaUnidad == null && test.nroExpBajaUnidad == null &&
@@ -183,22 +158,7 @@ public class Flota {
     /**
      * @deprecated
      */
-    public void addUnidadFlota(){
-        int indice = nextDisponible();
-        int idFlota = getIdFlota(this.dominioUnidad);
+    public void addUnidadFlota(int idFlota, int idContrato,String dominioUnidad){
 
-        if(indice >= 0 &&  idFlota >0) {
-            listaFlota[indice].setCuitEmpresa(this.cuitEmpresa);
-            listaFlota[indice].setDominioUnidad(this.dominioUnidad);
-            listaFlota[indice].setIdFlota(idFlota);
-            listaFlota[indice].setNroExpAltaUnidad(this.nroExpAltaUnidad);
-            listaFlota[indice].setNroResolucionAlta(this.nroResolucionAlta);
-            listaFlota[indice].setCorredor(this.corredor);
-            listaFlota[indice].setNroInterno(this.nroInterno);
-        }
-        else if(indice < 0)
-            System.out.println("No existe mas lugares donde insertar, disparar excepción !!");
-        else if (idFlota < 0)
-            System.out.println("No se encontro unidades para activas en la flota para esa empresaa, disparar excepción !!");
     }
 }

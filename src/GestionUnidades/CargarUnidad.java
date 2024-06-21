@@ -90,14 +90,16 @@ public class CargarUnidad {
      * @return true: el nro RTO existe y esta aprobada (RevisionTecnica.aprobado = 1 && existe)
      */
     public boolean validarRTO(int inNroTecnica){
-        return( new RevisionTecnica(inNroTecnica).isAprobe(inNroTecnica));
+        int temp = new RevisionTecnica(inNroTecnica).isAprobe(inNroTecnica);
+        return( temp == 1);
     }
 
     /**
      * @return true: la unidad no existe, indice == -1 (no encontró el dominio en el array)
      */
     public boolean isUnidadInexistente(String inDominio){
-        return((new Unidad(inDominio).exist(inDominio)) < 0);
+        int testigo = new Unidad(inDominio).exist(inDominio);
+        return testigo < 0;
     }
 
     /**
@@ -105,11 +107,9 @@ public class CargarUnidad {
      * @return true: la unidad existe en el sistema, está cargada,
      * pero actualmente su estado es inactivo (unidad.activo=0).
      */
-    public boolean isUnidadInactiva(String inDomino){
-        if(! isUnidadInexistente(inDomino) && !((new Unidad(inDomino).isActive(inDomino))))
-            return true;
-        else
-            return false;
+    public boolean isUnidadInactiva(String inDominio){
+        int testigo = new Unidad(inDominio).exist(inDominio);
+        return( testigo == 0);
     }
 
     /**
@@ -154,8 +154,10 @@ public class CargarUnidad {
         if(isAntiguedadOK(this.modelo)) {
             if (validarRTO(this.nroRTO)) {
                 if (validarEmpresaActiva(this.cuitEmpresa)) {
-                    if (isUnidadInexistente(this.dominio)) {
-                        int indice = nuevaUnidad.nextDisponible();
+                    // si la unidad no existe en BD
+                    if (nuevaUnidad.exist() < 0) {
+                        //agrego la unidad en la BD
+                        nuevaUnidad.addUnidad();
                         if(indice >= 0 &&  indice < Unidad.listaUnidades.length) {
                             Unidad.listaUnidades[indice] = nuevaUnidad;
                             asociarUnidadFlota();
@@ -180,6 +182,7 @@ public class CargarUnidad {
     }
 
     /**
+     * @deprecated
      * Solo a fines prácticos para mostrar los datos presentes en Unidad.listaUnidades
      * para poder verificar la carga de datos.
      */
@@ -194,6 +197,7 @@ public class CargarUnidad {
         }
     }
     /**
+     * @deprecated
      * Solo a fines prácticos para mostrar los datos presentes en Flota.listaFlota
      * para poder verificar la carga de datos.
      */

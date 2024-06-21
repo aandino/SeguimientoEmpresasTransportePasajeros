@@ -26,6 +26,9 @@
  */
 
 package GestionEntidades;
+import GestionEntidades.BaseDatos.MysqlConect;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Clase entidad Empresa: es la capa de persistencia
@@ -88,10 +91,35 @@ public class Empresa {
     /**
      * Quiero saber si la empresa esta/estuvo registrada en el sistema.
      * CUIT la empresa de la cual estoy realizando la búsqueda.
-     * @return [indíce] donde haya el registro -1 si no está.
+     * @return -1,0,1 donde: -1 no existe, 0 es INactiva, 1 esta activa.
      */
+    public int exist(String inCuit) {
+        try {
+            MysqlConect con = new MysqlConect();
+            ResultSet resultado = con.runExist("Empresa", "cuit", inCuit);
+            if (resultado.next())
+                return (resultado.getInt("activa"));
+        }catch (SQLException sql){
+            sql.printStackTrace();
+        }
+        return -1;
+    }
 
-    public int exist(String ciut) {
+    /**
+     * Quiero saber si la empresa además de existir en el sistema está activa.
+     * @return 1 si la empresa esta activa.
+     */
+    public boolean isActive(String inCiut){
+        int testigo = exist(inCiut);
+        return(testigo == 1);
+    }
+
+    /**
+     * @deprecated era solo para el array estático de la entrega3
+     * @param algo se agregó para sobrecargar el método y reemplazar
+     *             las llamadas externas por su nueva versión.
+     */
+    public int exist(String ciut, String algo) {
         for (int i = 0; i < listaEmpresas.length; i++) {
             if ( (listaEmpresas[i] != null) && (listaEmpresas[i].getCuit().equals(ciut)) ) {
                 return i;
@@ -99,14 +127,12 @@ public class Empresa {
         }
         return -1;
     }
-
     /**
-     * Quiero saber si la empresa además de existir en el sistema está activa.
-     * El uso de este método debe ir siempre acompañado del método exist().
-     * Primero validar que exist() retorne >= 0, que es el [índice] donde se
-     * encuentra el cuit.
+     * @deprecated era solo para el array estático de la entrega3
+     * @param algo se agregó para sobrecargar el método y reemplazarlo
+     *             por su nueva versión.
      */
-    public boolean isActive(String ciut){
+    public boolean isActive(String ciut,String algo){
         int indice = exist(ciut);
         if(indice >= 0)
             return listaEmpresas[indice].getActiva();

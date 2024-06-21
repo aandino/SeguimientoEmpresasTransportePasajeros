@@ -29,7 +29,7 @@ public class BuscarRTO extends Buscar {
      * @return true: en caso afirmativo.
      */
     public boolean verifyRTO(){
-        if(this.Rto.isAprobe(this.nroTecnica)) {
+        if((this.Rto.isAprobe(this.nroTecnica) == 1)) {
             return true;
         }
         else {

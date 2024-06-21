@@ -26,6 +26,10 @@
  */
 
 package GestionEntidades;
+import GestionEntidades.BaseDatos.MysqlConect;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class RevisionTecnica {
@@ -97,7 +101,7 @@ public class RevisionTecnica {
      * @param nroTecnica
      * @return [indice] donde se encontró o -1 sino existe.
      */
-    public int existRTO(int nroTecnica) {
+    public int existRTO(int nroTecnica, String algo) {
         for (int i = 0; i < listaRTO.length; i++) {
             if ((listaRTO[i] != null) &&(listaRTO[i].getNroTecnica() == nroTecnica)) {
                 return i;
@@ -105,14 +109,30 @@ public class RevisionTecnica {
         }
         return -1;
     }
+    /**
+     * Deseo saber el estado de una RTO (revisión técnica)
+     * @param inNroTecnica el nro. de una revisión técnica que estoy buscando.
+     * @return -1,0,1 donde: -1 no existe, 0 no aprobada, 1 aprobada.
+     */
+    public int isAprobe(int inNroTecnica){
+        try {
+            MysqlConect con = new MysqlConect();
+            ResultSet resultado = con.runQuery("rtoAprobada","RevisionTecnica", "nroTecnica", inNroTecnica);
+            if (resultado.next())
+                return (resultado.getInt("rtoAprobada"));
+        }catch (SQLException sql){
+            sql.printStackTrace();
+        }
+        return -1;
+    }
 
     /**
-     * Utilizar este método "siempre" acompañado de existRTO() >= 0
-     * paa asegurar primero la existencia de la RTO y evitar cualquier condición indeseada.
-     *  @return false: ojo !! la RTO puede que no exista.
+     * @deprecated era solo para el array estático de la entrega3
+     * @param algo se agregó para sobrecargar el método y reemplazar
+     *             las llamadas externas por su nueva versión.
      */
-    public boolean isAprobe(int nroTecnica){
-        int indice = existRTO(nroTecnica);
+    public boolean isAprobe(int nroTecnica, String algo){
+        int indice = existRTO(nroTecnica,"No se usa mas");
         if(indice >= 0)
             return listaRTO[indice].getRtoAprobada() ;
         else

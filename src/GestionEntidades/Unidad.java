@@ -1,4 +1,3 @@
-package GestionEntidades;
 /**
  * Set de Prueba para dar de alta una unidad.
  *
@@ -26,6 +25,12 @@ package GestionEntidades;
  *      Carrocería: TODOBUS
  */
 
+package GestionEntidades;
+import GestionEntidades.BaseDatos.MysqlConect;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.*;
 
 public class Unidad {
     private String dominio;
@@ -121,10 +126,79 @@ public class Unidad {
 
     /**
      * Quiero saber si la unidad esta/estuvo registrada en el sistema.
-     * @return índice: si el dominio exist en el sistema.
-     * -1 : si el dominio nunca ha sido dado de alta.
+     * @return -1,0,1 donde: -1 no existe, 0 es INactiva, 1 esta activa.
      */
-    public int exist(String inDominio){
+    public int exist(String inDominio) {
+        try {
+            MysqlConect con = new MysqlConect();
+            ResultSet resultado = con.runExist("Unidad", "dominio", inDominio);
+            if (resultado.next())
+                return (resultado.getInt("activa"));
+        }catch (SQLException sql){
+            sql.printStackTrace();
+        }
+        return -1;
+    }
+    /**
+     * Quiero saber si la unidad esta/estuvo registrada en el sistema.
+     * @return -1,0,1 donde: -1 no existe, 0 es INactiva, 1 esta activa.
+     */
+    public int exist() {
+        try {
+            MysqlConect con = new MysqlConect();
+            ResultSet resultado = con.runExist("Unidad", "dominio", this.dominio);
+            if (resultado.next())
+                return (resultado.getInt("activa"));
+        }catch (SQLException sql){
+            sql.printStackTrace();
+        }
+        return -1;
+    }
+    /**
+     * Quiero saber si la unidad existe en el sistema "y" además está activa.
+     * @return true unidad activa, false unidad no existe o no esta asociada a ninguna empresa.
+     */
+    public boolean isActive(String dominio){
+        int testigo = exist(dominio);
+        return(testigo == 1);
+    }
+
+    /**
+     * Activo una unidad que en algún momento estuvo vinculada a una
+     * empresa. Debe existir en el sistema y estar inactiva = 0.
+     * @param inDominio
+     */
+    public void setUnidadActiva(String inDominio){
+        int exito;
+        try {
+            if(isActive(inDominio))
+                throw new SQLException("OJO LA UNIDAD YA ESTA ACTIVA Unidad.setUnidadActiva linea 192");
+            MysqlConect con = new MysqlConect();
+            exito = con.runUpdateActivo("Unidad","dominio",inDominio);
+             if(exito !=1)
+                 throw new SQLException("NO SE PUEDO ACTUALIZAR UNIDAD Unidad.setUnidadActiva linea 194");
+        }catch (SQLException sql){
+            System.out.println(sql.getMessage());
+            sql.printStackTrace();
+        }
+    }
+
+    public int addUnidad(){
+        try{
+            MysqlConect con = new MysqlConect();
+            con.runInsertNuevaUnidad();
+        }catch (SQLException sql)
+
+    }
+
+
+//--------------------------------------------------------------------------------------------------------//
+    /**
+     * @deprecated era solo para el array estático de la entrega3
+     * @param algo se agregó para sobrecargar el método y reemplazar
+     *             las llamadas externas por su nueva versión.
+     */
+    public int exist(String inDominio, String algo){
         for (int i = 0; i < listaUnidades.length; i++) {
             if ((listaUnidades[i] != null) && (listaUnidades[i].dominio.equals(inDominio))) {
                 if (listaUnidades[i] == null)
@@ -136,34 +210,32 @@ public class Unidad {
         }
         return -1;
     }
-
     /**
-     * Quiero saber si la unidad existe en el sistema "y" además está activa.
-     * @return true: unidad activa, pertenece a la flota de alguna empresa.
-     * @return false: la unidad no existe o no esta asociada a ninguna empresa.
+     * @deprecated era solo para el array estático de la entrega3
+     * @param algo se agregó para sobrecargar el método y reemplazar
+     *             las llamadas externas por su nueva versión.
      */
-    public boolean isActive(String dominio){
+    public boolean isActive(String dominio, String algo){
         int indice = exist(dominio);
         if(indice >= 0)
             return listaUnidades[indice].getActivo();
         else
             return false;
     }
-
     /**
-     * Activo una unidad que en algún momento estuvo vinculada a una
-     * empresa. Debe existir en el sistema y estar inactiva = 0.
-     * @param dominio
+     * @deprecated era solo para el array estático de la entrega3
+     * @param algo se agregó para sobrecargar el método y reemplazar
+     *             las llamadas externas por su nueva versión.
      */
-    public void setUnidadActiva(String dominio){
+    public void setUnidadActiva(String dominio, String algo){
         int indice = exist(dominio);
         if(indice >= 0)
             listaUnidades[indice].setActivo();
         else
             System.out.println("Unidad.setUnidadActiva: La unidad no existe disparar excepción !!");
     }
-
     /**
+     * @deprecated se insertará directamente en la DB.
      * Busco el siguiente lugar libre en el array de Unidades.
      * @return [índice] de primer match == null.
      */
