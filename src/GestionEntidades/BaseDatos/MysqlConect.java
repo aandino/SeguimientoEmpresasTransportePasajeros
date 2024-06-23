@@ -80,28 +80,59 @@ public class MysqlConect {
         }
     }
 
-    public int runInsertUnidadFlota(String tabla, String inColumna, String criterio){
-        String query = "INSERT INTO ? VALUES (?, ?)";
-        return  1;
+    public ResultSet runQuery(String colResult,String tabla){
+        String query = "SELECT ? FROM ?";
+        try {
+            PreparedStatement pstm = conexion.prepareStatement(query);
+            pstm.setString(1, colResult);
+            pstm.setString(2, tabla);
+            return(pstm.executeQuery());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("ERROR en funcion MysqlConect.java->runExist linea 64");
+        }
     }
 
-    public int runInsertNuevaUnidad(String dominio, String modelo, String criterio){
-        String query = "INSERT INTO Unidad () VALUES (?,?,?,?,?,?,?)";
+    public int runInsertUnidadFlota(String tabla, String inColumna, String valores){
+        String insert = "INSERT INTO ? (?) VALUES (?)";
+        try{
+            ps = conexion.prepareStatement(insert);
+            ps.setString(1, tabla);
+            ps.setString(2, inColumna);
+            ps.setString(3, valores);
+            return(ps.executeUpdate());
+        }catch (SQLException sql){
+            sql.printStackTrace();
+            return -1;
+        }
+    }
+
+    public int runInsertNuevaUnidad(String tabla, String inColumna, String valores){
+        String insert = "INSERT INTO ? (?) VALUES (?)";
+        try{
+            ps = conexion.prepareStatement(insert);
+            ps.setString(1, tabla);
+            ps.setString(2, inColumna);
+            ps.setString(3, valores);
+            return(ps.executeUpdate());
+        }catch (SQLException sql){
+            sql.printStackTrace();
+            return -1;
+        }
 
     }
 
     public int runUpdateActivo(String tabla, String inColumna, String criterio){
-        int resultado;
+        int resultado = -1;
         String query = "UPDATE ? SET activa = 1 WHERE ? = ?";
         try{
             ps = conexion.prepareStatement(query);
             ps.setString(1, tabla);
             ps.setString(2, inColumna);
             ps.setString(3, criterio);
-            resultado = ps.executeUpdate();
+            return(ps.executeUpdate());
         }catch (SQLException sql){
             sql.printStackTrace();
-            throw new SecurityException("Error al ingresar el valor de activo");
         }
         return resultado;
     }

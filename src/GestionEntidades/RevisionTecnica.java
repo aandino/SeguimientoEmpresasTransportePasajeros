@@ -33,12 +33,12 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class RevisionTecnica {
-    private int nroTecnica;
-    private String dominio;
-    private int nroInterno;
-    private int pagoTasa;
-    private int rtoAprobada;
-    private LocalDate fechaEmisionRTO;
+    private int nroTecnica = -1;
+    private String dominio = null;
+    private int nroInterno = -1;
+    private int pagoTasa = -1;
+    private int rtoAprobada = -1;
+    private LocalDate fechaEmisionRTO = null;
 
     public static RevisionTecnica[] listaRTO = new RevisionTecnica[6];
     static{
@@ -54,10 +54,20 @@ public class RevisionTecnica {
      * sobre una unidad determinada, exista o no.
      */
 
-    public RevisionTecnica(int nroTecnica) {
+    public RevisionTecnica(int nroTecnica,String dominio) {
         this.nroTecnica = nroTecnica;
+        this.dominio = dominio;
     }
 
+    /**
+     * Constructor principal a la hora de crear una nueva RTO.
+     * Voy a revisar que ningúno de los parametros tenga el valor por defecto.
+     * @param nroTecnica
+     * @param dominio
+     * @param nroInterno
+     * @param pagoTasa
+     * @param rtoAprobada
+     */
     public RevisionTecnica(int nroTecnica, String dominio, int nroInterno, int pagoTasa, int rtoAprobada) {
         this.nroTecnica = nroTecnica;
         this.dominio = dominio;
@@ -96,46 +106,21 @@ public class RevisionTecnica {
     }
 
     /**
-     * Método para determinar si el nroTecnica subministrado existe en el sistema
-     * y a su vez si esta ha sido aprobada.
-     * @param nroTecnica
-     * @return [indice] donde se encontró o -1 sino existe.
-     */
-    public int existRTO(int nroTecnica, String algo) {
-        for (int i = 0; i < listaRTO.length; i++) {
-            if ((listaRTO[i] != null) &&(listaRTO[i].getNroTecnica() == nroTecnica)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-    /**
      * Deseo saber el estado de una RTO (revisión técnica)
-     * @param inNroTecnica el nro. de una revisión técnica que estoy buscando.
      * @return -1,0,1 donde: -1 no existe, 0 no aprobada, 1 aprobada.
      */
-    public int isAprobe(int inNroTecnica){
+    public int isAprobe(){
+        String where ="Unidad_dominio ="+this.dominio+" AND nroTecnica ";
         try {
             MysqlConect con = new MysqlConect();
-            ResultSet resultado = con.runQuery("rtoAprobada","RevisionTecnica", "nroTecnica", inNroTecnica);
+            ResultSet resultado = con.runQuery("rtoAprobada",
+                    "RevisionTecnica", where, this.nroTecnica);
             if (resultado.next())
+                // retorna 0 ó 1
                 return (resultado.getInt("rtoAprobada"));
         }catch (SQLException sql){
             sql.printStackTrace();
         }
         return -1;
-    }
-
-    /**
-     * @deprecated era solo para el array estático de la entrega3
-     * @param algo se agregó para sobrecargar el método y reemplazar
-     *             las llamadas externas por su nueva versión.
-     */
-    public boolean isAprobe(int nroTecnica, String algo){
-        int indice = existRTO(nroTecnica,"No se usa mas");
-        if(indice >= 0)
-            return listaRTO[indice].getRtoAprobada() ;
-        else
-            return false;
     }
 }

@@ -27,38 +27,18 @@
 
 package GestionEntidades;
 import GestionEntidades.BaseDatos.MysqlConect;
-import java.sql.PreparedStatement;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.*;
+
 
 public class Unidad {
-    private String dominio;
-    private  int modelo;
-    private String nroChasis;
-    private String nroMotor;
-    private String carroceria;
-    private int activo;
-    /**
-     * listaUnidades: Array de unidades.
-     * La misma ha sido estática a modo de mantener persistencia temporal de los
-     * datos y ser alcanzada desde otras clases.
-     */
-
-    public static Unidad[] listaUnidades = new Unidad[6];
-    static {
-        listaUnidades[0] = new Unidad("AC443NB", 2018,
-               "9BM384067HB000047", "924997U1170000", "ITALBUS");
-
-            listaUnidades[1] = new Unidad("AA381BF",2016,
-                "9BM384067HB035047","924997U1175569","ITALBUS");
-
-        listaUnidades[2] = new Unidad("JQJ193",2011,
-                "9BM384067BF136894","904968U0896049","METALPAR");
-
-        listaUnidades[3] = new Unidad("KIA817",2011,
-                "8BBC51A1ABM000335","D1A055820","METALPAR");
-    }
+    private String dominio = null;
+    private  int modelo =-1;
+    private String nroChasis =null;
+    private String nroMotor = null;
+    private String carroceria = null;
+    private int activo = -1;
 
     /**
      * Constructor para crear una nueva unidad no existente.
@@ -166,85 +146,43 @@ public class Unidad {
     /**
      * Activo una unidad que en algún momento estuvo vinculada a una
      * empresa. Debe existir en el sistema y estar inactiva = 0.
-     * @param inDominio
      */
-    public void setUnidadActiva(String inDominio){
-        int exito;
+    public int setUnidadActiva(){
+        int exito = -1;
         try {
-            if(isActive(inDominio))
-                throw new SQLException("OJO LA UNIDAD YA ESTA ACTIVA Unidad.setUnidadActiva linea 192");
+            if(isActive(this.dominio))
+                throw new SQLException("Unidad.setUnidadActiva linea 154: OJO LA UNIDAD YA ESTA ACTIVA !!");
             MysqlConect con = new MysqlConect();
-            exito = con.runUpdateActivo("Unidad","dominio",inDominio);
+            exito = con.runUpdateActivo("Unidad","dominio",this.dominio);
              if(exito !=1)
-                 throw new SQLException("NO SE PUEDO ACTUALIZAR UNIDAD Unidad.setUnidadActiva linea 194");
+                 throw new SQLException("Unidad.setUnidadActiva 158:NO SE PUEDO ACTUALIZAR UNIDAD !!");
+             else
+                 return exito;
         }catch (SQLException sql){
             System.out.println(sql.getMessage());
             sql.printStackTrace();
+            return exito;
         }
     }
 
     public int addUnidad(){
-        try{
-            MysqlConect con = new MysqlConect();
-            con.runInsertNuevaUnidad();
-        }catch (SQLException sql)
-
+        if(this.dominio == null || this.modelo == -1 || this.nroChasis == null||
+            this.nroMotor == null || this.carroceria == null)
+            throw new RuntimeException("UNIDAD 171: SE ESPERA QUE USE UN CONSTRUCTOR CON TODOS LOS PARÁMETROS !!");
+        int resultado = -1;
+        int activa = exist();
+        if(activa ==0)
+            return(setUnidadActiva());
+        else if (activa < 0) {
+            String tabla = "Unidad";
+            String columnas="";
+            String valores = "";
+            columnas +="dominio,modelo,nroChasis,nroMotor,carroceria,activa";
+            valores +=this.dominio+","+this.modelo+","+this.nroChasis+","+this.nroMotor+","+this.carroceria+",1";
+            MysqlConect conect = new MysqlConect();
+            resultado = conect.runInsertNuevaUnidad(tabla,columnas,valores);
+            return resultado;
+        }else
+            throw new RuntimeException("UNIDAD 186: NO SE PUDO INSERTAR NUEVA UNIDAD ACTIVA = 1 ");
     }
-
-
-//--------------------------------------------------------------------------------------------------------//
-    /**
-     * @deprecated era solo para el array estático de la entrega3
-     * @param algo se agregó para sobrecargar el método y reemplazar
-     *             las llamadas externas por su nueva versión.
-     */
-    public int exist(String inDominio, String algo){
-        for (int i = 0; i < listaUnidades.length; i++) {
-            if ((listaUnidades[i] != null) && (listaUnidades[i].dominio.equals(inDominio))) {
-                if (listaUnidades[i] == null)
-                    return(-1);
-                else if (listaUnidades[i].dominio.equals(inDominio)) {
-                    return(i);
-                }
-            }
-        }
-        return -1;
-    }
-    /**
-     * @deprecated era solo para el array estático de la entrega3
-     * @param algo se agregó para sobrecargar el método y reemplazar
-     *             las llamadas externas por su nueva versión.
-     */
-    public boolean isActive(String dominio, String algo){
-        int indice = exist(dominio);
-        if(indice >= 0)
-            return listaUnidades[indice].getActivo();
-        else
-            return false;
-    }
-    /**
-     * @deprecated era solo para el array estático de la entrega3
-     * @param algo se agregó para sobrecargar el método y reemplazar
-     *             las llamadas externas por su nueva versión.
-     */
-    public void setUnidadActiva(String dominio, String algo){
-        int indice = exist(dominio);
-        if(indice >= 0)
-            listaUnidades[indice].setActivo();
-        else
-            System.out.println("Unidad.setUnidadActiva: La unidad no existe disparar excepción !!");
-    }
-    /**
-     * @deprecated se insertará directamente en la DB.
-     * Busco el siguiente lugar libre en el array de Unidades.
-     * @return [índice] de primer match == null.
-     */
-    public int nextDisponible(){
-        for (int i = 0; i < listaUnidades.length; i++) {
-            if(listaUnidades[i] == null)
-                return i;
-        }
-        return -1;
-    }
-
 }

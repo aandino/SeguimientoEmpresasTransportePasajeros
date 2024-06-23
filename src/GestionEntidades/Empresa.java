@@ -37,11 +37,11 @@ public class Empresa {
     /**
      * Definicion de los atributos de la clase.
      */
-    private String cuit;
-    private String razonSocial;
-    private String domicilioComercial;
-    private String emailEmpresa;
-    private int activa;
+    private String cuit = null;
+    private String razonSocial = null;
+    private String domicilioComercial = null;
+    private String emailEmpresa = null;
+    private int activa = -1;
     /**
      * listaEmpresa: Array de Empresas.
      * Es estática a modo de mantener persistencia temporal de los
@@ -69,7 +69,6 @@ public class Empresa {
     }
 
     /**
-     * Polimorfismo.
      * Solo para cuando quiero saber información sobre una empresa
      * teniendo como único dato su "cuit"
      */
@@ -85,13 +84,13 @@ public class Empresa {
      * @return true si la empresa esta activa.
      */
     public boolean getActiva() {
-        return activa == 1;
+        return(activa == 1);
     }
 
     /**
      * Quiero saber si la empresa esta/estuvo registrada en el sistema.
      * CUIT la empresa de la cual estoy realizando la búsqueda.
-     * @return -1,0,1 donde: -1 no existe, 0 es INactiva, 1 esta activa.
+     * @return -1,0,1 donde: -1 no existe, 0 es INactiva, 1 esta Activa.
      */
     public int exist(String inCuit) {
         try {

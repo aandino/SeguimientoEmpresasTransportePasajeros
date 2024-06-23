@@ -79,136 +79,46 @@ public class CargarUnidad {
         return years < 15;
     }
 
-    /**
-     * @return true: la empresa esta activa (empresa.activa = 1 && existe)
-     */
-    public boolean validarEmpresaActiva(String inCuitEmpresa){
-        return(new Empresa(inCuitEmpresa).isActive(inCuitEmpresa));
-    }
-
-    /**
-     * @return true: el nro RTO existe y esta aprobada (RevisionTecnica.aprobado = 1 && existe)
-     */
-    public boolean validarRTO(int inNroTecnica){
-        int temp = new RevisionTecnica(inNroTecnica).isAprobe(inNroTecnica);
-        return( temp == 1);
-    }
-
-    /**
-     * @return true: la unidad no existe, indice == -1 (no encontró el dominio en el array)
-     */
-    public boolean isUnidadInexistente(String inDominio){
-        int testigo = new Unidad(inDominio).exist(inDominio);
-        return testigo < 0;
-    }
-
-    /**
-     * Necesito que la unidad exista "y" este inactiva
-     * @return true: la unidad existe en el sistema, está cargada,
-     * pero actualmente su estado es inactivo (unidad.activo=0).
-     */
-    public boolean isUnidadInactiva(String inDominio){
-        int testigo = new Unidad(inDominio).exist(inDominio);
-        return( testigo == 0);
-    }
-
-    /**
-     * @return true: idFlota si la empresa esta activa (empresa.activo = 1 )
-     */
-    public int getIdFlotaActiva(String inCuitEmpresa){
-        Empresa empresa = new Empresa(inCuitEmpresa);
-        if( (empresa.exist(inCuitEmpresa) >= 0 ) && (empresa.isActive(inCuitEmpresa)) )
-            return(new Flota(inCuitEmpresa).getIdFlota(inCuitEmpresa));
-        else
-            return(-1);
-    }
-
-    /**
-     * Método que realiza la relación Unidad - Flota - Empresa.
-     * Carga un registro en la table flota de la correspondiente relación.  
-     */
-    public void asociarUnidadFlota(){
-        int idFlotaEmpresa = getIdFlotaActiva(this.cuitEmpresa);
-        if(idFlotaEmpresa >= 0){
-            Flota UnidadFlota = new Flota(this.cuitEmpresa,this.dominio,idFlotaEmpresa,
-                    this.nroExpediente, this.nroResolucion, this.corredor,this.nroInterno);
-            int indice = UnidadFlota.nextDisponible();
-            if((indice >= 0 && indice < Flota.listaFlota.length) ){
-                Flota.listaFlota[indice] = UnidadFlota;
-            }else {
-                throw new IllegalArgumentException("ERROR CargarUnidad.asociarUnidadFlota");
-            }
-        } else if (idFlotaEmpresa < 0) {
-            System.out.println("CargarUnidad.asociarUnidadFlota: No se localizo ninguna Unidad en flota que no haya sido daba de baja !!");
-        } else if (isUnidadInexistente(this.dominio)) {
-            System.out.println("CargarUnidad.asociarUnidadFlota: El dominio existe 'o' esta activo. !!");
-        }
-    }
-
     /***
      * crear una nueva unidad en la DB y asociar está a la flota
      * de la empresa.
      */
     public void altaNuevaUnidad(){
+        // antiguedadOK: si la unidad tiene menos de 15 años.
+        boolean antiguedadOK = isAntiguedadOK(this.modelo);
+        // rtoAprovada: -1,0,1 donde: -1 no existe, 0 no aprobada, 1 aprobada.
+        int rtoAprovada = new RevisionTecnica(this.nroRTO,this.dominio).isAprobe();
+        // idContrato: 0 no hay contrato vigente ó idContrato vigente actual.
+        int idContrato = new Contrato(this.cuitEmpresa).getIdContrato();
+        // Creo un objeto Unidad con todos los parámetros.
         Unidad nuevaUnidad = new Unidad(this.dominio,this.modelo,this.nroChasis,this.nroMotor,this.carroceria);
-        if(isAntiguedadOK(this.modelo)) {
-            if (validarRTO(this.nroRTO)) {
-                if (validarEmpresaActiva(this.cuitEmpresa)) {
-                    // si la unidad no existe en BD
-                    if (nuevaUnidad.exist() < 0) {
-                        //agrego la unidad en la BD
-                        nuevaUnidad.addUnidad();
-                        if(indice >= 0 &&  indice < Unidad.listaUnidades.length) {
-                            Unidad.listaUnidades[indice] = nuevaUnidad;
-                            asociarUnidadFlota();
-                        }else {
-                            System.out.print("CargarUnidad.altaNuevaUnidad: Overflow Unidad.listaUnidades !!");
-                        }
-                    } else if (isUnidadInactiva(this.dominio)) {
-                        nuevaUnidad.setUnidadActiva(this.dominio);
-                        asociarUnidadFlota();
-                    } else {
-                        System.out.print("CargarUnidad.altaNuevaUnidad:  Situación no controlada !!");
-                    }
+        // estadoUnidad: -1,0,1 donde: -1 no existe, 0 es INactiva, 1 esta activa.
+        int estadoUnidad = nuevaUnidad.exist();
+        if(antiguedadOK) {
+            if (rtoAprovada == 1) {
+                if (idContrato > 0) {
+                    if(estadoUnidad <= 0) {
+                        Flota registrarUnidadFlota = new Flota(idContrato,this.dominio,this.nroExpediente,
+                                this.nroResolucion,this.corredor,this.nroInterno);
+                        if(nuevaUnidad.addUnidad() ==1)
+                            registrarUnidadFlota.addUnidadFlota(nuevaUnidad.getDominio());
+                        else
+                            throw new RuntimeException("CargarUnidad 106: ALGO SALIO MAL !!");
+                    }else
+                        throw new RuntimeException("CargarUnidad 108: LA UNIDAD YA ESTA ACTIVA !!");
                 } else {
-                    System.out.print("CargarUnidad.altaNuevaUnidad: la empresa no existe o no tiene un contrato activo !!");
+                        System.out.print("CargarUnidad.altaNuevaUnidad 110: NO HAY CONTRATO VIGENTE !!");
+                        throw new RuntimeException("CargarUnidad 111: NO HAY CONTRATO VIGENTE !!");
                 }
+
             } else {
-                System.out.print("CargarUnidad.altaNuevaUnidad: la RTO no existe o no esta aprobada !!");
-            }
+                    System.out.print("CargarUnidad.altaNuevaUnidad 115: RTO no existe o no esta aprobada !!");
+                    throw new RuntimeException("CargarUnidad 116: RTO NO EXISTE O NO ESTA APROBADA !!");
+                }
         } else {
-            System.out.print("CargarUnidad.altaNuevaUnidad: la unidad supera los 15 años  !!");
+            System.out.print("CargarUnidad.altaNuevaUnidad 119: la unidad supera los 15 años  !!");
+            throw new RuntimeException("CargarUnidad 120: LA UNIDAD SUPERA LOS 15 AÑOS!!");
         }
     }
 
-    /**
-     * @deprecated
-     * Solo a fines prácticos para mostrar los datos presentes en Unidad.listaUnidades
-     * para poder verificar la carga de datos.
-     */
-    public static void imprimirUnidades(){
-        System.out.println("Listado de Unidades: ");
-        for (int i = 0; i < Unidad.listaUnidades.length; i++) {
-            if ((Unidad.listaUnidades[i] != null)) {
-                System.out.print("Dominio: "+Unidad.listaUnidades[i].getDominio()+"-");
-                System.out.print("Modelo: "+Unidad.listaUnidades[i].getModelo()+"-");
-                System.out.println("NroChasis: "+Unidad.listaUnidades[i].getNroChasis());
-            }
-        }
-    }
-    /**
-     * @deprecated
-     * Solo a fines prácticos para mostrar los datos presentes en Flota.listaFlota
-     * para poder verificar la carga de datos.
-     */
-    public static void imprimirFlota(){
-        System.out.println("Listado de la Flota: ");
-        for(int i = 0; i < Flota.listaFlota.length; i++){
-            if ((Flota.listaFlota[i] != null)) {
-                System.out.print("CUIT: "+Flota.listaFlota[i].getCuitEmpresa()+"-");
-                System.out.print("idFlota: "+Flota.listaFlota[i].getIdFlota()+"-");
-                System.out.println("Dominio: "+Flota.listaFlota[i].getDominioUnidad());
-            }
-        }
-    }
 }

@@ -47,11 +47,11 @@ public class MainMenu {
                     break;
                 case 2:
                     //clearConsole();
-                    CargarUnidad.imprimirUnidades();
+
                     break;
                 case 3:
                     //clearConsole();
-                    CargarUnidad.imprimirFlota();
+
                     break;
                 default:
                     System.out.println("Opción no válida. Intente de nuevo.");

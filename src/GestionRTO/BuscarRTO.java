@@ -10,18 +10,12 @@ public class BuscarRTO extends Buscar {
     private RevisionTecnica Rto;
     private String dominio ="";
 
-    public BuscarRTO(int nroTecnica) {
-        super();
+    public BuscarRTO(int nroTecnica, String dominio) {
+
         this.nroTecnica = nroTecnica;
-        this.Rto = new RevisionTecnica(nroTecnica);
+        this.Rto = new RevisionTecnica(nroTecnica, dominio);
     }
 
-    public BuscarRTO(int nroTecnica, String dominio) {
-        super();
-        this.nroTecnica = nroTecnica;
-        this.dominio = dominio;
-        this.Rto = new RevisionTecnica(nroTecnica);
-    }
 
     /**
      * Verifica si el nro de comprobante de rto (revision tecnica obligatoria)
@@ -29,7 +23,7 @@ public class BuscarRTO extends Buscar {
      * @return true: en caso afirmativo.
      */
     public boolean verifyRTO(){
-        if((this.Rto.isAprobe(this.nroTecnica) == 1)) {
+        if((this.Rto.isAprobe() == 1)) {
             return true;
         }
         else {
