@@ -79,15 +79,20 @@ public class Flota {
      * @return -1,0,IdFlota para ese contrato, -1: error sql, 0: la flota no existe aún.
      */
 
-    public int getIdFlota(){
+    public int getIdFlotaContrato(){
         ResultSet resultado = null;
+        int idActualResult = -1;
         try{
             MysqlConect conect = new MysqlConect();
-            resultado = conect.runQuery("idFlota","Flota","Contrato_id",this.idContratoEmpresa);
+            resultado = conect.runQuery("COUNT(idFlota),MAX(idFlota)",
+                    "Flota","nroExpBajaUnidad IS NULL AND Contrato_idContrato",this.idContratoEmpresa);
             if (resultado.next())
-                return(resultado.getInt("idFlota"));
+                if(resultado.getInt(1) > 0)
+                    return(resultado.getInt(2));
+                else
+                    return(getLastIdFlota()+1);
             else
-                return 0;
+                throw new RuntimeException("ERROR linea 94 FLOTA.java !!! ");
         }catch (SQLException sql){
             sql.printStackTrace();
             return -1;
@@ -112,7 +117,7 @@ public class Flota {
                     return 0;
             }
             else
-                throw new RuntimeException("flota.getLastIdFlota 116");
+                throw new RuntimeException("flota.getLastIdFlota 119");
         }catch (SQLException sql){
             sql.printStackTrace();
             return -1;
@@ -130,17 +135,17 @@ public class Flota {
         LocalDate fechaAltaUnidad = LocalDate.now();
         //Si no hay ninguna flota aún, inserto el primer id en 1.
         //Ya que me retorne cero, en el método getLastIdFlota.
-        int idFlota = getIdFlota();
-        if(idFlota ==0){
-            idFlota = getLastIdFlota()+1;
-        }
-        String tabla = "FLOTA";
+        int idFlota = getIdFlotaContrato();
+        if(idFlota ==0)
+            idFlota = 1;
+
+        String tabla = "Flota";
         String columnas="";
         String valores = "";
-        columnas +="Contrato_idContrato,Unidad_dominio,idFlota,nroExpAltaUnidad,fechaAltaUnidad";
+        columnas +="Contrato_idContrato,Unidad_dominio,idFlota,nroExpAltaUnidad,fechaAltaUnidad,";
         columnas +="nroResolucionAltaUnidada,corredor,nroInterno";
-        valores +=this.idContratoEmpresa+","+dominioUnidad+","+idFlota+","+this.nroExpAltaUnidad+","+fechaAltaUnidad+",";
-        valores +=this.nroResolucionAlta+","+this.corredor+","+this.nroInterno;
+        valores +="'"+this.idContratoEmpresa+"','"+dominioUnidad+"',"+idFlota+",'"+this.nroExpAltaUnidad+"','"+fechaAltaUnidad+"','";
+        valores +=this.nroResolucionAlta+"','"+this.corredor+"',"+this.nroInterno;
         MysqlConect conect = new MysqlConect();
         resultado = conect.runInsertUnidadFlota(tabla,columnas,valores);
         return resultado;

@@ -40,7 +40,7 @@ public class Contrato {
      * @return idContrato, 0 -> si no existe un contrato o no hay un contrato vigente.
      */
     public int getIdContrato() {
-        String where ="nroExpBajaEmpresa = NULL AND Empresa_cuit";
+        String where ="nroExpBajaEmpresa IS NULL AND Empresa_cuil";
         try {
             MysqlConect conect = new MysqlConect();
             ResultSet resultado = conect.runQuery("idContrato", "Contrato",where, this.cuitEmpresa);

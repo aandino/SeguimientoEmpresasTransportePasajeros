@@ -105,7 +105,7 @@ public class CargarUnidad {
                         else
                             throw new RuntimeException("CargarUnidad 106: ALGO SALIO MAL !!");
                     }else
-                        throw new RuntimeException("CargarUnidad 108: LA UNIDAD YA ESTA ACTIVA !!");
+                        throw new RuntimeException("ERROR CargarUnidad 108: LA UNIDAD YA ESTA ACTIVA !!");
                 } else {
                         System.out.print("CargarUnidad.altaNuevaUnidad 110: NO HAY CONTRATO VIGENTE !!");
                         throw new RuntimeException("CargarUnidad 111: NO HAY CONTRATO VIGENTE !!");

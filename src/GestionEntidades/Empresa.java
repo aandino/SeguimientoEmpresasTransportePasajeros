@@ -42,20 +42,6 @@ public class Empresa {
     private String domicilioComercial = null;
     private String emailEmpresa = null;
     private int activa = -1;
-    /**
-     * listaEmpresa: Array de Empresas.
-     * Es estática a modo de mantener persistencia temporal de los
-     * datos y ser alcanzada desde otras clases, sin la necesidad de
-     * instanciar objetos de clase.
-     */
-
-    public static Empresa[] listaEmpresas = new Empresa[2];
-    static{
-        listaEmpresas[0] = new Empresa("30700786206","Blanca Paloma srl","Av. libertador general san martin 91",
-                "administracion@blancapaloma.com");
-        listaEmpresas[1] = new Empresa("30710760965","Grupo MR SRL","Benedicto Morales 265",
-                "administracion@mr.com.ar");
-    }
 
     /**
      * Constructor para cuando quiera dar de alta una nueva empresa.
@@ -111,33 +97,6 @@ public class Empresa {
     public boolean isActive(String inCiut){
         int testigo = exist(inCiut);
         return(testigo == 1);
-    }
-
-    /**
-     * @deprecated era solo para el array estático de la entrega3
-     * @param algo se agregó para sobrecargar el método y reemplazar
-     *             las llamadas externas por su nueva versión.
-     */
-    public int exist(String ciut, String algo) {
-        for (int i = 0; i < listaEmpresas.length; i++) {
-            if ( (listaEmpresas[i] != null) && (listaEmpresas[i].getCuit().equals(ciut)) ) {
-                return i;
-            }
-        }
-        return -1;
-    }
-    /**
-     * @deprecated era solo para el array estático de la entrega3
-     * @param algo se agregó para sobrecargar el método y reemplazarlo
-     *             por su nueva versión.
-     */
-    public boolean isActive(String ciut,String algo){
-        int indice = exist(ciut);
-        if(indice >= 0)
-            return listaEmpresas[indice].getActiva();
-        else
-            return false;
-        // Deberia lanzar una excepción: la empresa no se encuentra en la lista !!!
     }
 
 }

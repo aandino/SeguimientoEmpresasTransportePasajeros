@@ -178,7 +178,7 @@ public class Unidad {
             String columnas="";
             String valores = "";
             columnas +="dominio,modelo,nroChasis,nroMotor,carroceria,activa";
-            valores +=this.dominio+","+this.modelo+","+this.nroChasis+","+this.nroMotor+","+this.carroceria+",1";
+            valores +="'"+this.dominio+"','"+this.modelo+"','"+this.nroChasis+"','"+this.nroMotor+"','"+this.carroceria+"',1";
             MysqlConect conect = new MysqlConect();
             resultado = conect.runInsertNuevaUnidad(tabla,columnas,valores);
             return resultado;

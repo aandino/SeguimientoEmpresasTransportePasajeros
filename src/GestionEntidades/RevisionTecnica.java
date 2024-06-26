@@ -110,15 +110,18 @@ public class RevisionTecnica {
      * @return -1,0,1 donde: -1 no existe, 0 no aprobada, 1 aprobada.
      */
     public int isAprobe(){
-        String where ="Unidad_dominio ="+this.dominio+" AND nroTecnica ";
+        //String where ="(Unidad_dominio like '%"+this.dominio+"%')' AND 'nroTecnica";
+        String where ="nroTecnica";
         try {
             MysqlConect con = new MysqlConect();
             ResultSet resultado = con.runQuery("rtoAprobada",
                     "RevisionTecnica", where, this.nroTecnica);
-            if (resultado.next())
+            if (resultado.next()) {
                 // retorna 0 ó 1
                 return (resultado.getInt("rtoAprobada"));
+            }
         }catch (SQLException sql){
+            System.out.println(sql.getMessage());
             sql.printStackTrace();
         }
         return -1;

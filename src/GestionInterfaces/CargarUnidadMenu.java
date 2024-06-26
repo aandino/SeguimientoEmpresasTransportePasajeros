@@ -198,7 +198,7 @@ public class CargarUnidadMenu {
 
         }
         catch (Exception e) {
-            System.out.println("ERROR: No se puede ingresar la nueva unidad");
+            //System.out.println("ERROR CargarUnidadMenu.java: 201");
             System.out.println(e.getMessage());
             return;
         }
