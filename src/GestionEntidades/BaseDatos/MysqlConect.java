@@ -96,7 +96,7 @@ public class MysqlConect {
         }else if (tabla.contentEquals("Flota")) {
             query = "SELECT " + colResult + " FROM " + tabla + " WHERE " + matchColumn + "=" + matchValue;
         }else {
-            throw new RuntimeException("ERROR MysqlConnect linea 99: TABLA NO MATCH");
+            query = "SELECT " + colResult + " FROM " + tabla + " WHERE " + matchColumn + "=" + matchValue;
         }
         try {
             PreparedStatement pstm = conexion.prepareStatement(query);

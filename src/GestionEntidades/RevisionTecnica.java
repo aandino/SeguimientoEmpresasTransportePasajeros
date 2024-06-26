@@ -40,14 +40,6 @@ public class RevisionTecnica {
     private int rtoAprobada = -1;
     private LocalDate fechaEmisionRTO = null;
 
-    public static RevisionTecnica[] listaRTO = new RevisionTecnica[6];
-    static{
-        listaRTO[0] = new RevisionTecnica(2602,"AC443NB",200,1,1);
-        listaRTO[1] = new RevisionTecnica(2603,"AA381BF",121,1,1);
-        listaRTO[2] = new RevisionTecnica(2604,"JQJ193",67,1,1);
-        listaRTO[3] = new RevisionTecnica(2605,"KIA817",110,1,1);
-        listaRTO[4] = new RevisionTecnica(2606,"AA381BB",120,1,1);
-    }
 
      /** Polimorfismo.
      * Constructor para cuando "solo" se van a realizar consultas
@@ -101,9 +93,6 @@ public class RevisionTecnica {
         return fechaEmisionRTO;
     }
 
-    public RevisionTecnica[] getListaRTO() {
-        return listaRTO;
-    }
 
     /**
      * Deseo saber el estado de una RTO (revisión técnica)

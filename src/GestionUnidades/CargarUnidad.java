@@ -103,21 +103,21 @@ public class CargarUnidad {
                         if(nuevaUnidad.addUnidad() ==1)
                             registrarUnidadFlota.addUnidadFlota(nuevaUnidad.getDominio());
                         else
-                            throw new RuntimeException("CargarUnidad 106: ALGO SALIO MAL !!");
+                            throw new RuntimeException("CargarUnidad 106: ALGO SALIO MAL - CARGA RECHAZADA !!");
                     }else
-                        throw new RuntimeException("ERROR CargarUnidad 108: LA UNIDAD YA ESTA ACTIVA !!");
+                        throw new RuntimeException("ERROR CargarUnidad 108: LA UNIDAD YA ESTA ACTIVA - CARGA RECHAZADA !!");
                 } else {
-                        System.out.print("CargarUnidad.altaNuevaUnidad 110: NO HAY CONTRATO VIGENTE !!");
-                        throw new RuntimeException("CargarUnidad 111: NO HAY CONTRATO VIGENTE !!");
+                        //System.out.print("CargarUnidad.altaNuevaUnidad 110: NO HAY CONTRATO VIGENTE !!");
+                        throw new RuntimeException("CargarUnidad 111: NO HAY CONTRATO VIGENTE - CARGA RECHAZADA !!");
                 }
 
             } else {
-                    System.out.print("CargarUnidad.altaNuevaUnidad 115: RTO no existe o no esta aprobada !!");
-                    throw new RuntimeException("CargarUnidad 116: RTO NO EXISTE O NO ESTA APROBADA !!");
+                    //System.out.print("CargarUnidad.altaNuevaUnidad 115: RTO no existe o no esta aprobada !!");
+                    throw new RuntimeException("CargarUnidad 116: RTO NO EXISTE O NO ESTA APROBADA - CARGA RECHAZADA !!");
                 }
         } else {
-            System.out.print("CargarUnidad.altaNuevaUnidad 119: la unidad supera los 15 años  !!");
-            throw new RuntimeException("CargarUnidad 120: LA UNIDAD SUPERA LOS 15 AÑOS!!");
+            //System.out.print("CargarUnidad.altaNuevaUnidad 119: la unidad supera los 15 años  !!");
+            throw new RuntimeException("CargarUnidad 120: LA UNIDAD SUPERA LOS 15 AÑOS - CARGA RECHAZADA!!");
         }
     }
 

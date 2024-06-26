@@ -1,11 +1,13 @@
 package GestionInterfaces;
 
 import java.util.Scanner;
+import GestionUnidades.BuscarUnidad;
 
-public class BuscarUnidadMenu {
+public class BuscarUnidadMenu extends Menu{
     private Scanner scanner = new Scanner(System.in);
 
     public void display() {
+        clearConsole();
         System.out.print("Dominio: ");
         String dominio = scanner.nextLine();
 

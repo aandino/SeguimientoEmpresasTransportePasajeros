@@ -185,4 +185,22 @@ public class Unidad {
         }else
             throw new RuntimeException("UNIDAD 186: NO SE PUDO INSERTAR NUEVA UNIDAD ACTIVA = 1 ");
     }
+
+    public void getAll(){
+        try {
+            MysqlConect conect = new MysqlConect();
+            ResultSet resultSet = conect.runQuery("dominio,modelo", "Unidad", "activa", 1);
+            System.out.println("");
+            System.out.println("------ UNIDADES ACTIVAS ------------");
+            System.out.println("");
+            while (resultSet.next()) {
+                System.out.println("Domino: " + resultSet.getString("dominio")+" | Modelo: " + resultSet.getInt("modelo"));
+                System.out.println("");
+            }
+            System.out.println("");
+        }catch (SQLException sql){
+            sql.printStackTrace();
+        }
+    }
+
 }
