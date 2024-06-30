@@ -1,42 +1,15 @@
-/**
- * Set de Prueba para dar de alta una unidad.
- *
- * Pre-Requisito:
- *  Debe estar cargada la relación Unidad-RevisionTecnica.
- *  Para este caso se suministra la relación en:
- *  RevisionTecnica.listaRTO[4] = new RevisionTecnica(2606,"AA381BB",120,1,1);
- *  Donde se refleja que la unidad con dominio:AA381BB se le asignó el
- *  nro de técnica "2606", la cual está aprobada, bit 1 final.
- *  El sistema no permite cargar una nueva unidad que no haya pasado
- *  el proceso de revision técnica obligatoria, es decir un registro
- *  RevisionTecnica.listaRTO.
- *
- *  Datos Unidad:
- *      Dominio: AA381BB
- *      Modelo: 2016
- *      Nro. Interno: 120
- *      Corredor: San Luis - La Carolina
- *      Nro. Revision Técnica: 2606
- *      CUIT: 30710760965
- *      EXP de Alta: EXP-1290150/22
- *      Resolución: 44/11
- *      Nro. Chasis: 8BBC51A1AGM001214
- *      Nro. Motor: DCA000280
- *      Carrocería: TODOBUS
- */
-
 package GestionUnidades;
 import java.time.LocalDate;
 import java.time.Period;
 import GestionEntidades.*;
 
 /**
- * Clase controladora Cargar Unidad: es la responsable de llevar
- * adelante el CU07 - CargarUnidad.
+ * Clase controladora CargarUnidad: es la responsable de llevar
+ * adelante la lógica del negocio del CU07 - CargarUnidad.
  */
 public class CargarUnidad {
     /**
-     * Definicion de los atributos de la clase.
+     * Definición de los atributos de la clase.
      */
     private String dominio;
     private int nroInterno;
@@ -71,7 +44,13 @@ public class CargarUnidad {
         this.carroceria = carroceria;
     }
 
-    public boolean isAntiguedadOK(int modelo){
+    /**
+     * Clase interna (private) que se encargara de realizar el calcúlo de antigûedad minima
+     * de un vehículo
+     * @param modelo año de fabricación del vehículo.
+     * @return true si tiene menos de 15 años de atigûedad.
+     */
+    private boolean isAntiguedadOK(int modelo){
         LocalDate currentDate = LocalDate.now();
         LocalDate modeloUnidad = LocalDate.of(modelo, 12, 31);
         Period difference = Period.between(modeloUnidad, currentDate);
@@ -80,8 +59,10 @@ public class CargarUnidad {
     }
 
     /***
-     * crear una nueva unidad en la DB y asociar está a la flota
-     * de la empresa.
+     * Método con la responsabilidad de validar que se cumplan con todas las reglas del negocio.
+     * Crear una nueva entrada en la tabla Unidad, si esta no existe en el sistema o actualizar
+     * el estado en caso de que esta exista y este inactiva, en los demás casos que no se cumpla
+     * debe rechazar la carga.
      */
     public void altaNuevaUnidad(){
         // antiguedadOK: si la unidad tiene menos de 15 años.
@@ -95,16 +76,18 @@ public class CargarUnidad {
         // estadoUnidad: -1,0,1 donde: -1 no existe, 0 es INactiva, 1 esta activa.
         int estadoUnidad = nuevaUnidad.exist();
         if(antiguedadOK) {
-            if (rtoAprovada == 1) {
-                if (idContrato > 0) {
-                    if(estadoUnidad <= 0) {
+            if (rtoAprovada == 1) { // RTO aprobada
+                if (idContrato > 0) { // Existe un contrato vigente
+                    if(estadoUnidad <= 0) { // -1: unidad no existe en el sistema, 0: existió pero fue dada de baja.
+                        // Objeto de tipo flota, para agregar y asociar la unidad a la tabla Flota.
                         Flota registrarUnidadFlota = new Flota(idContrato,this.dominio,this.nroExpediente,
                                 this.nroResolucion,this.corredor,this.nroInterno);
-                        if(nuevaUnidad.addUnidad() ==1)
+                        if(nuevaUnidad.addUnidad() ==1) // se insertó correctamente 1 registro en la tabla Unidad.
+                            //Asocio la unidad con la flota de la empresa/contrato.
                             registrarUnidadFlota.addUnidadFlota(nuevaUnidad.getDominio());
-                        else
+                        else // NO se pudo insertar el registro en la tabla Unidad.
                             throw new RuntimeException("CargarUnidad 106: ALGO SALIO MAL - CARGA RECHAZADA !!");
-                    }else
+                    }else //estadoUnidad==1 la unidad activa, no se puede cargar 2 veces.
                         throw new RuntimeException("ERROR CargarUnidad 108: LA UNIDAD YA ESTA ACTIVA - CARGA RECHAZADA !!");
                 } else {
                         //System.out.print("CargarUnidad.altaNuevaUnidad 110: NO HAY CONTRATO VIGENTE !!");
