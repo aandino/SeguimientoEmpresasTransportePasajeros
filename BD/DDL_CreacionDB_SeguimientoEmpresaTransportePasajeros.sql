@@ -1,7 +1,19 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
 -- Schema SeguimientoEmpresasTransportePasajeros
 -- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `SeguimientoEmpresasTransportePasajeros` ;
+
+-- -----------------------------------------------------
+-- Schema SeguimientoEmpresasTransportePasajeros
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `SeguimientoEmpresasTransportePasajeros` DEFAULT CHARACTER SET utf8 ;
+USE `SeguimientoEmpresasTransportePasajeros` ;
 
 -- -----------------------------------------------------
 -- Table `Empresa`
@@ -29,9 +41,10 @@ CREATE TABLE IF NOT EXISTS `Unidad` (
   `modelo` VARCHAR(45) NULL,
   `nroChasis` VARCHAR(45) NULL,
   `nroMotor` VARCHAR(45) NULL,
-  `nroCarroceria` VARCHAR(45) NULL,
-  `activo` TINYINT NOT NULL DEFAULT 1,
-  PRIMARY KEY (`dominio`))
+  `carroceria` VARCHAR(45) NULL,
+  `activa` TINYINT NOT NULL DEFAULT 1,
+  PRIMARY KEY (`dominio`),
+  UNIQUE INDEX `dominio_UNIQUE` (`dominio` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -41,13 +54,13 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `RevisionTecnica` ;
 
 CREATE TABLE IF NOT EXISTS `RevisionTecnica` (
-  `nroTecnica` INT NOT NULL,
-  `Unidad_dominio` VARCHAR(21) NOT NULL,
+  `nroTecnica` INT NOT NULL AUTO_INCREMENT,
+  `Unidad_dominio` VARCHAR(21) NULL,
   `nroInterno` INT NULL,
   `pagoTasa` TINYINT(1) NULL,
   `rtoAprobada` TINYINT(1) NULL,
   `fechaEmisionRTO` DATE NULL,
-  PRIMARY KEY (`nroTecnica`, `Unidad_dominio`),
+  PRIMARY KEY (`nroTecnica`),
   INDEX `fk_RevisionTecnica_Unidad1_idx` (`Unidad_dominio` ASC) VISIBLE,
   CONSTRAINT `fk_RevisionTecnica_Unidad1`
     FOREIGN KEY (`Unidad_dominio`)
@@ -153,28 +166,28 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `Flota` ;
 
 CREATE TABLE IF NOT EXISTS `Flota` (
-  `Empresa_cuit` VARCHAR(21) NOT NULL,
+  `Contrato_idContrato` INT NOT NULL,
   `Unidad_dominio` VARCHAR(21) NOT NULL,
   `IdFlota` INT NOT NULL,
   `nroExpAltaUnidad` VARCHAR(20) NOT NULL,
-  `nroExpBajaUnidad` VARCHAR(20) NULL,
+  `nroExpBajaUnidad` VARCHAR(20) NULL DEFAULT NULL,
   `fechaAltaUnidad` DATE NOT NULL,
   `fechaBajaUnidad` DATE NULL DEFAULT NULL,
   `nroResolucionAltaUnidada` VARCHAR(45) NULL,
   `nroResolucionBajaUnidad` VARCHAR(45) NULL,
   `corredor` VARCHAR(45) NULL,
   `nroInterno` INT NULL,
-  INDEX `fk_Flota_Empresa1_idx` (`Empresa_cuit` ASC) VISIBLE,
-  PRIMARY KEY (`Empresa_cuit`, `Unidad_dominio`, `IdFlota`, `nroExpAltaUnidad`),
+  PRIMARY KEY (`Contrato_idContrato`, `Unidad_dominio`),
   INDEX `fk_Flota_Unidad1_idx` (`Unidad_dominio` ASC) VISIBLE,
-  CONSTRAINT `fk_Flota_Empresa1`
-    FOREIGN KEY (`Empresa_cuit`)
-    REFERENCES `Empresa` (`cuit`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+  INDEX `fk_Flota_Contrato1_idx` (`Contrato_idContrato` ASC) VISIBLE,
   CONSTRAINT `fk_Flota_Unidad1`
     FOREIGN KEY (`Unidad_dominio`)
     REFERENCES `Unidad` (`dominio`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Flota_Contrato1`
+    FOREIGN KEY (`Contrato_idContrato`)
+    REFERENCES `Contrato` (`idContrato`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -201,3 +214,8 @@ CREATE TABLE IF NOT EXISTS `Empleado` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
