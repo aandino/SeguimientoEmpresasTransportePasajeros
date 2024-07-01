@@ -5,6 +5,12 @@ import java.sql.SQLException;
 import GestionEntidades.Unidad;
 import GestionEntidades.BaseDatos.MysqlConect;
 
+/**
+ * Clase controladora es parte del CU10: "GestionarBúsquedas" !!
+ * Esta clase "no" es parte del CU07:CargarUnidad, solo se ha desarrollado parte
+ * de la funcionalidad para que muestre los resultados de las operaciones del CU10.
+ *
+ */
 
 public class BuscarUnidad {
     private String dominio;

@@ -84,18 +84,24 @@ public class CargarUnidad {
                         // Objeto de tipo flota, para agregar y asociar la unidad a la tabla Flota.
                         Flota registrarUnidadFlota = new Flota(idContrato,this.dominio,this.nroExpediente,
                                 this.nroResolucion,this.corredor,this.nroInterno);
-                        if(nuevaUnidad.addUnidad() ==1) // se insertó correctamente 1 registro en la tabla Unidad.
+                        if(nuevaUnidad.addUnidad() ==1) {// se insertó correctamente 1 registro en la tabla Unidad.
                             //Asocio la unidad con la flota de la empresa/contrato.
-                            registrarUnidadFlota.addUnidadFlota(nuevaUnidad.getDominio());
-                        else // NO se pudo insertar el registro en la tabla Unidad.
+                            if ((registrarUnidadFlota.addUnidadFlota(nuevaUnidad.getDominio())) == 1) {
+                                System.out.println("OPERACIÓN EXITOSA .. Se ha cargado la Unidad !!");
+                            }
+                            else{
+                                throw new RuntimeException("ROLLBACK: ALTA UNIDAD Y FLOTA - CARGA RECHAZADA !!");
+                            }
+                        }
+                        else { // NO se pudo insertar el registro en la tabla Unidad.
                             throw new RuntimeException("CargarUnidad 106: ALGO SALIO MAL - CARGA RECHAZADA !!");
+                        }
                     }else //estadoUnidad==1 la unidad activa, no se puede cargar 2 veces.
                         throw new RuntimeException("ERROR CargarUnidad 108: LA UNIDAD YA ESTA ACTIVA - CARGA RECHAZADA !!");
                 } else {
                         //System.out.print("CargarUnidad.altaNuevaUnidad 110: NO HAY CONTRATO VIGENTE !!");
                         throw new RuntimeException("CargarUnidad 111: NO HAY CONTRATO VIGENTE - CARGA RECHAZADA !!");
                 }
-
             } else {
                     //System.out.print("CargarUnidad.altaNuevaUnidad 115: RTO no existe o no esta aprobada !!");
                     throw new RuntimeException("CargarUnidad 116: RTO NO EXISTE O NO ESTA APROBADA - CARGA RECHAZADA !!");
