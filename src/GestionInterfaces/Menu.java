@@ -1,7 +1,6 @@
 package GestionInterfaces;
 import java.time.LocalDate;
 
-
 /**
  * Clase abstracta padre para todas las clases de tipo "menu"
  * Esta provee de métodos comunes de validación

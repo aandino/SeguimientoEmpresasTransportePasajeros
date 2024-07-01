@@ -141,15 +141,21 @@ public class Unidad {
         }
     }
 
+    /**
+     * @summary actualiza el estado de una unidad inactiva a activa ó inserta esta en el
+     * sistema si no ha existido nunca.
+     * @return nro de filas actualizadas o insertadas
+     */
     public int addUnidad(){
+        //Evito que se llame de forma incorrecta a este método.
         if(this.dominio == null || this.modelo == -1 || this.nroChasis == null||
             this.nroMotor == null || this.carroceria == null)
             throw new RuntimeException("UNIDAD 171: SE ESPERA QUE USE UN CONSTRUCTOR CON TODOS LOS PARÁMETROS !!");
         int resultado = -1;
         int activa = exist();
-        if(activa ==0)
+        if(activa ==0) // existe una entrada en la tabla Unidad pero está inactiva
             return(setUnidadActiva());
-        else if (activa < 0) {
+        else if (activa < 0) { // no existe esta unidad en la tabla Unidad.
             String tabla = "Unidad";
             String columnas="";
             String valores = "";
@@ -162,6 +168,9 @@ public class Unidad {
             throw new RuntimeException("UNIDAD 186: NO SE PUDO INSERTAR NUEVA UNIDAD ACTIVA = 1 ");
     }
 
+    /**
+     * @summary futuro método que devolverá una colección de DTO.
+     */
     public void getAll(){
         try {
             MysqlConect conect = new MysqlConect();

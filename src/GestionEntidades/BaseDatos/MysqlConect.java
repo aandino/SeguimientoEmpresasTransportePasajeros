@@ -1,6 +1,13 @@
 package GestionEntidades.BaseDatos;
 import java.sql.*;
 
+/**
+ * Clase de servicio que provee a las clases modelo/entidad la funcionalidad
+ * propia de acceso a los datos.
+ * Reutilizamos la clase cada vez que quéramos acceder a la BD, esto es
+ * útil para ahorrar recursos como para proveer de controles y manejo de
+ * excepciones de forma centralizada.
+ */
 
 public class MysqlConect {
     private String usuario = "remoto";
@@ -29,13 +36,15 @@ public class MysqlConect {
                 System.out.println(e.getMessage());
             }
         }
-        /* cantidad de veces que se pido una conexión, puedo decrementarlo
-        cada vez que termino de usar un query. Sí es cero debería cerrar
-        la conexión a la DB.
-        */
         cantConexiones++;
     }
 
+    /**
+     * Se provee de métodos propios para abstraer a las clases modelo/entidad de las particularidades
+     * del motor de base de datos. Para ello se sobrecarga cada método para adaptarse a diferentes
+     * circunstancias partícular.
+     *
+     */
 
     public ResultSet runExist(String tabla, String inColumna, String matchValue){
         String query ="";

@@ -1,36 +1,17 @@
-/**
- * Set de Prueba para dar de alta una unidad.
- *
- * Pre-Requisito:
- *  Debe estar cargada la relación Unidad-RevisionTecnica.
- *  Para este caso se suministra la relación en:
- *  RevisionTecnica.listaRTO[4] = new RevisionTecnica(2606,"AA381BB",120,1,1);
- *  Donde se refleja que la unidad con dominio:AA381BB se le asignó el
- *  nro de técnica "2606", la cual está aprobada, bit 1 final.
- *  El sistema no permite cargar una nueva unidad que no haya pasado
- *  el proceso de revision técnica obligatoria, es decir un registro
- *  RevisionTecnica.listaRTO.
- *
- *  Datos Unidad:
- *      Dominio: AA381BB
- *      Modelo: 2016
- *      Nro. Interno: 120
- *      Corredor: San Luis - La Carolina
- *      Nro. Revision Técnica: 2606
- *      CUIT: 30710760965
- *      EXP de Alta: EXP-1290150/22
- *      Resolución: 44/11
- *      Nro. Chasis: 8BBC51A1AGM001214
- *      Nro. Motor: DCA000280
- *      Carrocería: TODOBUS
- */
-
 package GestionEntidades;
 import GestionEntidades.BaseDatos.MysqlConect;
 import java.time.LocalDate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ La clase “Flota” es una clase entidad consecuencia del análisis de los datos y
+ en ella recae la responsabilidad de mantener la relación de agregación
+ existente en el modelo del negocio. Ella será la responsable de mantener la
+ persistencia de los datos de la relación existente entre las tablas Unidad y
+ Contrato, brindando información sobre esta y asignando las unidades a la flota de
+ vehículos de una empresa.
+ */
 public class Flota {
     private int idContratoEmpresa = -1;
     private String dominioUnidad = null;
@@ -78,7 +59,6 @@ public class Flota {
      * Se debe haber validado previamente que Contrato (IDContrato) sea válido/vigente.
      * @return -1,0,IdFlota para ese contrato, -1: error sql, 0: la flota no existe aún.
      */
-
     public int getIdFlotaContrato(){
         ResultSet resultado = null;
         int idActualResult = -1;
@@ -123,10 +103,10 @@ public class Flota {
             return -1;
         }
     }
+
     /**
      * Agrego una unidad a una flota existente, si la flota no, creo la primera.
      */
-
     public int addUnidadFlota(String dominioUnidad){
         //Evito que se llame de forma incorrecta a este método.
         if(this.nroInterno == -1 || this.corredor == null || this.nroExpAltaUnidad == null || this.nroResolucionAlta == null)
@@ -150,5 +130,4 @@ public class Flota {
         resultado = conect.runInsertUnidadFlota(tabla,columnas,valores);
         return resultado;
     }
-
 }

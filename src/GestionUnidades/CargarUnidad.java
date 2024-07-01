@@ -4,8 +4,10 @@ import java.time.Period;
 import GestionEntidades.*;
 
 /**
- * Clase controladora CargarUnidad: es la responsable de llevar
- * adelante la lógica del negocio del CU07 - CargarUnidad.
+ * La clase control “CargarUnidad” será la encargada de gestionar
+ * toda la lógica del negocio para llevar adelante el CU07 – Cargar Unidad.
+ * Esta será la encarga de mantener las clases “entidades” respetando la
+ * lógica del caso de uso.
  */
 public class CargarUnidad {
     /**
